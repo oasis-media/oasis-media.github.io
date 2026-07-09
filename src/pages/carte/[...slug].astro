@@ -1,0 +1,23 @@
+---
+import { getEntry, render, getCollection } from 'astro:content';
+
+import PaysLayout from '../../layouts/layout.astro';
+
+export async function getStaticPaths() {
+  const pays = await getCollection('docs');
+  return pays.map(entry => ({
+    params: { slug: entry.id },   // "france", "allemagne"
+    props: { entry },
+  }));
+}
+
+const entry = await getEntry('docs', 'test');
+if (!entry) {
+  throw new Error("Page introuvable");
+}
+const { Content } = await render(entry);
+---
+
+<PaysLayout frontmatter={entry.data}>
+  <Content />
+</PaysLayout>

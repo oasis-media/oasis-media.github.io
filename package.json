@@ -15,6 +15,6 @@
   "type": "commonjs",
   "dependencies": {
     "@astrojs/markdoc": "^2.0.3",
-    "astro": "^7.0.6"
+    "astro": "^7.0.7"
   }
 }
