@@ -45,7 +45,7 @@ img {
 }
 
 body {
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 * {
@@ -159,7 +159,7 @@ html {
 }
 
 .menu-bg {
-  height: 100vh;
+  height: 100dvh;
   width: 100vw;
   position: fixed;
   top: 0;
@@ -220,7 +220,7 @@ html {
 }
 
 .indexBg {
-  height: 100vh;
+  height: 100dvh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -318,7 +318,7 @@ html {
 }
 #map {
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   display: flex;
   justify-content: center;
   align-items: center;
