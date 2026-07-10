@@ -1,0 +1,160 @@
+---
+import MenuLayout from "../layouts/MenuLayout.astro";
+import Head from "../layouts/Head.astro";
+import { Image } from 'astro:assets';
+
+import index from '.././assets/img/index.png';
+
+interface Post {
+    url: string;
+    frontmatter: {
+        title: string;
+        type: string;
+        author: string;
+        [key: string]: any;
+    };
+}
+
+const matches = import.meta.glob<Post>("./articles/*.md", { eager: true });
+const posts = Object.values(matches);
+---
+
+<html lang="fr">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+        />
+        <Head title="Articles" />
+    </head>
+    <body>
+        <MenuLayout />
+        <div class="contentWrapper">
+            <div class="topLogo">
+            <Image src={index} alt=""/>
+
+            </div>
+            <div class="browseWrap">
+                {
+                    posts.map((post) => (
+                        <a href={post.url}>
+                            <div class="articleCard">
+                                <div class="leftInfo">
+                                    <p>{post.frontmatter.type}</p>
+                                </div>
+                                <div class="titleWrapper">
+                                    <div class="titleInfo">
+                                        <svg
+                                            class="line0"
+                                            width="100%"
+                                            height="100%"
+                                            viewBox="0 0 400 200"
+                                            preserveAspectRatio="none"
+                                        >
+                                            <text
+                                                x="0"
+                                                y="0"
+                                                font-size="400"
+                                                font-weight="900"
+                                                font-family="Druk"
+                                            >
+                                                {post.frontmatter.title}
+                                            </text>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="authorInfo">
+                                    <p>{post.frontmatter.author}</p>
+                                </div>
+                            </div>
+                        </a>
+                    ))
+                }
+            </div>
+        </div>
+
+        <script>
+            const svg = document.querySelector(".titleInfo .line1");
+            const svg2 = document.querySelector(".titleInfo .line2");
+            if (!svg || !svg2) {
+            } else {
+                const text = svg.querySelector("text");
+                const text2 = svg2.querySelector("text");
+
+                if(!text || !text2){
+
+                } else {
+                    document.fonts.ready.then(() => {
+                        const bbox = text.getBBox();
+                        const bbox2 = text2.getBBox();
+    
+                        svg.setAttribute(
+                            "viewBox",
+                            `0 0 ${bbox.width}  ${bbox.height}`,
+                        );
+                        svg2.setAttribute(
+                            "viewBox",
+                            `0 0 ${bbox2.width} ${bbox2.height}`,
+                        );
+
+                        if(!bbox || !bbox2){
+
+                        } else {
+
+                        text.setAttribute("x", "0");
+                        text.setAttribute("y", String(bbox.height - 20));
+                        text2.setAttribute("x", "0");
+                        text2.setAttribute("y", String(bbox2.height - 20));
+                        }
+    
+                    });
+                }
+            }
+        </script>
+        <script>
+            var colors = [
+                ["#BC1919", "#FFF5F4"],
+                ["#FFF5F4", "#BC1919"],
+                ["black", "#FFF5F4"],
+                ["#FFF5F4", "black"],
+                ["black", "#BC1919"],
+            ];
+            const svgs = [...document.querySelectorAll<SVGElement>(".titleInfo .line0")];
+
+            document.fonts.ready.then(() => {
+                var tot = colors.length - 1;
+                var tic = 0;
+                svgs.forEach((svg) => {
+                    while (tic > tot) {
+                        tic = tic - tot - 1;
+                    }
+                    if (!svg) return;
+                    const text = svg.querySelector("text");
+                    if (!text) return;
+                    if(svg.parentElement && svg.parentElement.parentElement && svg.parentElement.parentElement.parentElement){
+                        const par = svg.parentElement.parentElement.parentElement ;
+                        par.style.backgroundColor = colors[tic][1];
+                        const parPs = [...par.querySelectorAll("p")];
+                        parPs.forEach((parP) => {
+                            parP.style.color = colors[tic][0];
+                        });
+                        const pct = Math.floor(Math.random() * 16) + 70;
+                        svg.parentElement.style.width = pct + "%";
+    
+                        svg.style.fill = colors[tic][0];
+                        const bbox = text.getBBox();
+                        svg.setAttribute(
+                            "viewBox",
+                            `0 0 ${bbox.width} ${bbox.height}`,
+                        );
+                        text.setAttribute("x", "0");
+                        text.setAttribute("y", String(bbox.height - 35));
+                        tic = tic + 1;
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

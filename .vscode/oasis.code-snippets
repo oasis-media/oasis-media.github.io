@@ -1,0 +1,20 @@
+{
+  "Sidenote": {
+    "prefix": "sidenote",
+    "body": [
+      "{% sidenote id=\"$1\" %}",
+      "$2",
+      "{% /sidenote %}"
+    ],
+    "description": "Insert a sidenote tag"
+  },
+  "Epigraph": {
+    "prefix": "epigraph",
+    "body": [
+      "{% epigraph author=\"$1\" %}",
+      "$2",
+      "{% /epigraph %}"
+    ],
+    "description": "Insert an epigraph tag"
+  }
+}

@@ -1,0 +1,140 @@
+---
+import MenuLayout from "../layouts/MenuLayout.astro";
+import Head from "../layouts/Head.astro";
+const { title, date, author, type } = Astro.props.frontmatter;
+import { Image } from 'astro:assets';
+
+import index from '.././assets/img/index.png';
+---
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <Head title={title}></Head>
+    <link rel="stylesheet" href=".../css/tufte.css"/>
+  </head>
+  <body>
+    <MenuLayout></MenuLayout>
+            <div class="topLogo">
+                                                        <Image src={index} alt=""/>
+
+            </div>
+            <div class="contentWrapper">
+            <div id="cardTitle" class=" articleCard">
+                                <div class="leftInfo">
+                                    <p>{type}</p>
+                                </div>
+                                <div class="titleWrapper">
+                                    <div class="titleInfo">
+                                        <svg
+                                            class="line0"
+                                            width="100%"
+                                            height="100%"
+                                            viewBox="0 0 400 200"
+                                            preserveAspectRatio="none"
+                                        >
+                                            <text
+                                                x="0"
+                                                y="0"
+                                                font-size="400"
+                                                font-weight="900"
+                                                font-family="Druk"
+                                            >
+                                                {title}
+                                            </text>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="authorInfo">
+                                    <p>{author}</p>
+                                </div>
+                            </div>
+        
+        <div class="page">
+            <article>
+                <slot/>
+            </article>
+        </div>
+        <div class="content"></div>
+        </div>
+
+        <script>
+            const svg = document.querySelector<SVGSVGElement>(".titleInfo .line1");
+            const svg2 = document.querySelector<SVGSVGElement>(".titleInfo .line2");
+            if (!svg || !svg2) throw new Error("SVG elements not found");
+
+            const text = svg.querySelector("text");
+            const text2 = svg2.querySelector("text");
+            if (!text || !text2) throw new Error("text elements not found");
+
+            // Après chargement de la font
+            document.fonts.ready.then(() => {
+                const bbox = text.getBBox();
+                const bbox2 = text2.getBBox();
+
+                svg.setAttribute(
+                    "viewBox",
+                    `0 0 ${bbox.width}  ${bbox.height}`,
+                );
+                svg2.setAttribute(
+                    "viewBox",
+                    `0 0 ${bbox2.width} ${bbox2.height}`,
+                );
+
+                text.setAttribute("x", "0");
+                text.setAttribute("y", String(bbox.height - 20));
+                text2.setAttribute("x", "0");
+                text2.setAttribute("y", String(bbox2.height - 20));
+            });
+        </script>
+        <script>
+            var colors = [
+                ["#BC1919", "#FFF5F4"],
+                ["#FFF5F4", "#BC1919"],
+                ["black", "#FFF5F4"],
+                ["#FFF5F4", "black"],
+                ["black", "#BC1919"],
+            ];
+            const svgs = [...document.querySelectorAll<SVGSVGElement>(".titleInfo .line0")];
+
+            document.fonts.ready.then(() => {
+                var num = Math.floor(Math.random() * (5));
+                svgs.forEach((svg) => {
+                    if (!svg) return;
+                    const text = svg.querySelector("text");
+                    if (!text) return;
+                    const par = svg.parentElement?.parentElement?.parentElement;
+                    if (!par) return;
+
+                    (par as HTMLElement).style.backgroundColor = colors[num][1];
+                    const parPs = [...par.querySelectorAll("p")];
+                    parPs.forEach((parP) => {
+                        (parP as HTMLElement).style.color = colors[num][0];
+                    });
+                    const pct = Math.floor(Math.random() * 16) + 70;
+                    if (svg.parentElement) {
+                        (svg.parentElement as HTMLElement).style.width = pct + "%";
+                    }
+
+                    svg.style.fill = colors[num][0];
+                    const bbox = text.getBBox();
+                    svg.setAttribute(
+                        "viewBox",
+                        `0 0 ${bbox.width} ${bbox.height}`,
+                    );
+                    text.setAttribute("x", "0");
+                    text.setAttribute("y", String(bbox.height - 35));
+                });
+            });
+        </script>
+        <script>
+            const ow = [...document.querySelectorAll(".endnote")];
+            ow.forEach((p, index) => {
+    p.addEventListener('click', () => {
+        document.getElementById(`sn-${index + 1}`)?.previousElementSibling?.scrollIntoView()
+    })
+})
+            
+        </script>
+  </body>
+</html>

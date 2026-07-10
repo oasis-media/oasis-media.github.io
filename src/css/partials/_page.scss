@@ -1,0 +1,16 @@
+#cardTitle {
+ margin-top: 50px;   
+ transition: none;
+         pointer-events: none;
+}
+
+@media (max-width: 550px) {
+    #cardTitle {
+ margin-top: 40px;   
+        height: 90px;
+        grid-template-columns: 30px 1fr 60px;
+        font-size: 10px;
+    }
+}
+
+

@@ -1,0 +1,129 @@
+const posts = await Astro.glob<{ title: string; sum: string }>("./data/*.md");
+
+
+
+{
+                        posts.map((post) => (
+                            <a href={post.url}>
+                                <div class="card">
+                                    <h1>
+                                        <span>{post.frontmatter.title}</span>
+                                    </h1>
+                                    <p>{post.frontmatter.sum}</p>
+                                    <img src="../img/noise.png" alt="" />
+                                </div>
+                            </a>
+                        ))
+                    }
+
+
+
+
+<svg class="line0" width="100%" height="100%" viewBox="0 0 400 200" preserveAspectRatio="none">
+          <text  x="0" y="0" font-size="400" font-weight="900" font-family="Druk">
+              SUR LE TERRORISME
+            </text>
+        </svg>
+
+
+        <svg class="line1"  viewBox="0 0 400 200" preserveAspectRatio="none">
+          <text  x="0" y="0" font-size="400" font-weight="900" font-family="Druk">
+              SUR LE TERRORISME
+            </text>
+        </svg>
+
+        <svg class="line2"  viewBox="0 0 400 200" preserveAspectRatio="none">
+          <text  x="0" y="0" font-size="400" font-weight="900" font-family="Druk">
+              SUR LE TERRORISME
+            </text>
+        </svg>
+
+
+
+
+
+<div class="cursorSvg">
+    <svg width="800px" height="800px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" version="1.1" style="pointer-events: auto;">
+    
+      <path clip-path="inset(0)" style="pointer-events: auto;" d="M 5,5 90,30 65,50 95,80 80,95 50,65 30,90 z"/>
+    
+    </svg>
+</div>
+
+<script>
+    const hasMouse = window.matchMedia('(pointer: fine)').matches;
+
+if (hasMouse) {
+    console.log('hey')
+  document.body.classList.add('has-cursor');
+}
+    const cursor = document.querySelector('.cursorSvg');
+
+    if(cursor){
+        // Suivre la souris
+        document.addEventListener('mousemove', (e) => {
+          cursor.style.left = e.clientX + 'px';
+          cursor.style.top  = e.clientY + 'px';
+        });
+        
+        // Hover sur liens/boutons
+        const interactives = document.querySelectorAll('a, button, [data-cursor]');
+        
+        interactives.forEach(el => {
+          el.addEventListener('mouseenter', () => cursor.classList.add('is-hovering'));
+          el.addEventListener('mouseleave', () => cursor.classList.remove('is-hovering'));
+        });
+        
+        // Click
+        document.addEventListener('mousedown', () => cursor.classList.add('is-clicking'));
+        document.addEventListener('mouseup',   () => cursor.classList.remove('is-clicking'));
+
+    }
+
+    
+</script>
+
+
+
+
+ alls.map((a) => {
+                a.style.fill = "#121212";
+                if (fiche.includes(a.parentElement.id)) {
+                    a.style.fill = "#ffadad";
+                }
+                a.addEventListener("mouseenter", () => {
+                    const countries = [...a.parentElement.children];
+                    countries.map((c) => {
+                        c.style.fill = "#BC1919";
+                    });
+                    dataArray.map((d) => {
+                        if (d.alpha2Code == a.parentElement.id) {
+                            info.innerHTML = d.translations.fr;
+                        }
+                    });
+                });
+                a.addEventListener("mouseleave", () => {
+                    const textBefore = document.createTextNode(
+                        "Les pays fichés ont ",
+                    );
+                    const span = document.createElement("span");
+                    span.textContent = "cette couleur";
+                    info.replaceChildren(textBefore, span);
+                    info.appendChild(span);
+                    const countries = [...a.parentElement.children];
+                    countries.map((c) => {
+                        c.style.fill = "#FFF5F4";
+                        if (fiche.includes(a.parentElement.id)) {
+                            [...a.parentElement.children].map((j) => {
+                                j.style.fill = "#ffadad";
+                            });
+                        }
+                    });
+                });
+                a.addEventListener("click", () => {
+                    const code = a.parentElement.id.toLowerCase();
+                    if (fiche.includes(a.parentElement.id)) {
+                        window.location.replace(window.location + "/" + code);
+                    }
+                });
+            });

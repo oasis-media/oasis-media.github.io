@@ -1,0 +1,327 @@
+---
+import MenuLayout from "../layouts/MenuLayout.astro";
+import Head from "../layouts/Head.astro";
+import { Image } from "astro:assets";
+
+import index from ".././assets/img/index.png";
+
+const { code } = Astro.props.frontmatter;
+const lowerCode = code.toLowerCase();
+
+interface Country {
+    alpha2Code: string;
+    region: string;
+    translations: { fr: string; [key: string]: string | null };
+    [key: string]: any;
+}
+
+// countries.json est dans /public, donc on le lit directement via fs
+// plutôt que de l'importer comme module (import ne fonctionne que pour src/)
+import countries from "../data/countries.json";
+
+let country: Country | undefined;
+(countries as Country[]).forEach((c) => {
+    if (code == c.alpha2Code) {
+        country = c;
+    }
+});
+
+if (!country) {
+    throw new Error(`Country not found for code: ${code}`);
+}
+---
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
+        <meta name="generator" content={Astro.generator} />
+        <Head title={country.translations.fr} />
+    </head>
+    <body>
+        <MenuLayout />
+
+        <div class="topLogo">
+            <Image src={index} alt="" />
+        </div>
+
+        <div class="contentWrapper">
+            <div id="cardTitle" class="articleCard">
+                <div class="leftInfo">
+                    <p>{country.region}</p>
+                </div>
+                <div class="titleWrapper">
+                    <div class="titleInfo">
+                        <svg
+                            class="line0"
+                            width="100%"
+                            height="100%"
+                            viewBox="0 0 400 200"
+                            preserveAspectRatio="none"
+                        >
+                            <text
+                                x="0"
+                                y="0"
+                                font-size="400"
+                                font-weight="900"
+                                font-family="Druk"
+                            >
+                                {
+                                    country.translations.fr
+                                        .normalize("NFD")
+                                        .replace(/[\u0300-\u036f]/g, "")
+                                        .toUpperCase()
+                                }
+                            </text>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flagInfo">
+                    <img
+                        src=`https://flagcdn.com/w2560/${lowerCode}.png`
+                        alt=`${code}`
+                    />
+                </div>
+            </div>
+        </div>
+
+        <script>
+            var colors = [
+                ["#BC1919", "#FFF5F4"],
+                ["#FFF5F4", "#BC1919"],
+                ["black", "#FFF5F4"],
+                ["#FFF5F4", "black"],
+                ["black", "#BC1919"],
+            ];
+            const svgs = [
+                ...document.querySelectorAll<SVGSVGElement>(
+                    ".titleInfo .line0",
+                ),
+            ];
+
+            document.fonts.ready.then(() => {
+                var num = Math.floor(Math.random() * 5);
+                svgs.forEach((svg) => {
+                    if (!svg) return;
+                    const text = svg.querySelector("text");
+                    if (!text) return;
+                    const par = svg.parentElement?.parentElement?.parentElement;
+                    if (!par) return;
+
+                    (par as HTMLElement).style.backgroundColor = colors[num][1];
+                    const parPs = [...par.querySelectorAll("p")];
+                    parPs.forEach((parP) => {
+                        (parP as HTMLElement).style.color = colors[num][0];
+                    });
+                    const pct = Math.floor(Math.random() * 16) + 70;
+                    if (svg.parentElement) {
+                        (svg.parentElement as HTMLElement).style.width =
+                            pct + "%";
+                    }
+
+                    svg.style.fill = colors[num][0];
+                    const bbox = text.getBBox();
+                    svg.setAttribute(
+                        "viewBox",
+                        `0 0 ${bbox.width} ${bbox.height}`,
+                    );
+                    text.setAttribute("x", "0");
+                    text.setAttribute("y", String(bbox.height - 35));
+                });
+            });
+        </script>
+        <div class="page">
+            <article>
+                <slot />
+            </article>
+        </div>
+
+        <script>
+            const parls = [
+                ...document.querySelectorAll<SVGSVGElement>(".parlement"),
+            ];
+            const elements = [
+                ...document.querySelectorAll<HTMLElement>(
+                    ".bandeauPol[data-sample]",
+                ),
+            ];
+            const samples: string[][] = [];
+            elements.forEach((el) => {
+                samples.push(JSON.parse(el.dataset.sample ?? "[]"));
+            });
+
+            let lasthover: SVGGElement | HTMLDivElement | "" = "";
+
+            parls.forEach((parl) => {
+                const margin =
+                    parl.parentElement?.querySelector<HTMLElement>(
+                        "span.marginnote",
+                    );
+                const groups = [...parl.querySelectorAll("g")];
+
+                groups.forEach((groupie) => {
+                    groupie.dataset.originalFill =
+                        getComputedStyle(groupie).fill;
+                });
+
+                groups.forEach((g, index) => {
+                    const circoW = document.createElement("div");
+                    const circoCol = document.createElement("div");
+                    const circoSpan = document.createElement("span");
+                    circoCol.classList.add("polCirc");
+                    circoW.appendChild(circoCol);
+                    const color = getComputedStyle(g).fill;
+                    const title = g.querySelector("title")?.innerHTML ?? "";
+                    const tot = [...g.querySelectorAll("circle")].length;
+                    circoCol.style.backgroundColor = color;
+                    circoSpan.innerHTML = title + " (" + tot + ")";
+                    circoW.appendChild(circoSpan);
+                    margin?.appendChild(circoW);
+                    circoW.dataset.party = title;
+                    g.dataset.party = title;
+
+                    // plus tard
+
+                    g.addEventListener("mouseover", () => {
+                        lasthover = g;
+                        const mimi = [
+                            ...(margin?.querySelectorAll("div") ?? []),
+                        ];
+                        mimi.forEach((m) => {
+                            (m as HTMLElement).style.color = "white";
+                        });
+                        circoW.style.color = "#BC1919";
+                        groups.forEach((groupie, indecs) => {
+                            if (indecs != index) {
+                                groupie.style.fill = "grey";
+                            } else {
+                                groupie.style.fill =
+                                    groupie.dataset.originalFill ?? "";
+                            }
+                        });
+                    });
+
+                    parl.addEventListener("mouseleave", () => {
+                        lasthover = "";
+
+                        circoW.style.color = "";
+                        groups.forEach((groupie) => {
+                            groupie.style.fill =
+                                groupie.dataset.originalFill ?? ""; // retire le style inline → retombe sur le CSS/HTML de base
+                        });
+                    });
+
+                    circoW.addEventListener("mouseover", () => {
+                        lasthover = circoW;
+                        groups.forEach((groupie, indecs) => {
+                            if (indecs != index) {
+                                groupie.style.fill = "grey";
+                            } else {
+                                groupie.style.fill =
+                                    groupie.dataset.originalFill ?? "";
+                            }
+                        });
+                    });
+
+                    circoW.addEventListener("mouseleave", () => {
+                        lasthover = "";
+                        groups.forEach((groupie) => {
+                            groupie.style.fill =
+                                groupie.dataset.originalFill ?? ""; // retire le style inline → retombe sur le CSS/HTML de base
+                        });
+                    });
+                });
+            });
+
+            document.addEventListener("click", () => {
+                if (lasthover) {
+                    const party = lasthover.dataset.party;
+                    const result = samples.findIndex((arr) =>
+                        arr.includes(party ?? ""),
+                    );
+                    if (elements[result]) {
+                        elements[result].scrollIntoView({
+                            behavior: "smooth",
+                            block: "start",
+                        });
+                    }
+                }
+            });
+        </script>
+        <script>
+            function getDominantColor(imgElement: HTMLImageElement): string {
+                const canvas = document.createElement("canvas");
+                const ctx = canvas.getContext("2d");
+                if (!ctx) throw new Error("Canvas context not available");
+
+                canvas.width = imgElement.naturalWidth;
+                canvas.height = imgElement.naturalHeight;
+                ctx.drawImage(imgElement, 0, 0);
+                const w = canvas.width;
+                const h = canvas.height;
+                const { data } = ctx.getImageData(0, 0, w, h);
+
+                const getPixel = (
+                    x: number,
+                    y: number,
+                ): [number, number, number] => {
+                    const i = (y * w + x) * 4;
+                    return [data[i], data[i + 1], data[i + 2]];
+                };
+
+                const borderPixels: [number, number, number][] = [];
+                for (let x = 0; x < w; x++) {
+                    borderPixels.push(getPixel(x, 0));
+                    borderPixels.push(getPixel(x, h - 1));
+                }
+                for (let y = 0; y < h; y++) {
+                    borderPixels.push(getPixel(0, y));
+                    borderPixels.push(getPixel(w - 1, y));
+                }
+
+                const colorMap: Record<string, number> = {};
+                borderPixels.forEach(([r, g, b]) => {
+                    const key = `${Math.round(r / 10) * 10},${Math.round(g / 10) * 10},${Math.round(b / 10) * 10}`;
+                    colorMap[key] = (colorMap[key] || 0) + 1;
+                });
+
+                const sorted = Object.entries(colorMap).sort(
+                    (a, b) => b[1] - a[1],
+                );
+                const dominant = sorted[0]?.[0];
+                if (!dominant) throw new Error("No dominant color found");
+
+                return `rgb(${dominant})`;
+            }
+
+            const imgs = [
+                ...document.querySelectorAll<HTMLImageElement>(
+                    ".bandeauPol img",
+                ),
+            ];
+            imgs.forEach((img) => {
+                if (img.complete && img.naturalWidth > 0) {
+                    // déjà chargée (cache, ou script exécuté après coup) → traite direct
+                    const color = getDominantColor(img);
+                    if (img.parentElement) {
+                        (
+                            img.parentElement as HTMLElement
+                        ).style.backgroundColor = color;
+                    }
+                } else {
+                    img.addEventListener("load", () => {
+                    const color = getDominantColor(img);
+                    if (img.parentElement) {
+                        (
+                            img.parentElement as HTMLElement
+                        ).style.backgroundColor = color;
+                    }
+                });
+                }
+
+                
+            });
+        </script>
+        <div class="bigAssMargin"></div>
+    </body>
+</html>
