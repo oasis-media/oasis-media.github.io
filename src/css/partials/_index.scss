@@ -5,7 +5,13 @@
 }
 
 @font-face {
-    font-family: 'Druk';
+    font-family: Druk;
+    src: url('/fonts/Druk.woff2') format('woff2'),
+         url('/fonts/Druk.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'DrukBis';
     font-style: normal;
     font-weight: normal;
     src:  url('/fonts/DrukWideBold.woff') format('woff');
@@ -208,7 +214,7 @@ html {
 .menu-bg {
     display: none;
     .li {
-        font-family: 'Druk', sans-serif;
+        font-family: 'Druk','DrukBis', sans-serif;
         color: var(--bg);
         transform: scaleY(1.38);
         font-size: 2rem;
