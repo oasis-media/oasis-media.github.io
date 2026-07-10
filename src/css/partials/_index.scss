@@ -5,10 +5,11 @@
 }
 
 @font-face {
-    font-family: Druk;
-    src: url('/fonts/Druk.woff2') format('woff2'),
-         url('/fonts/Druk.ttf') format('truetype');
-}
+    font-family: 'Druk';
+    font-style: normal;
+    font-weight: normal;
+    src:  url('/fonts/DrukWideBold.woff') format('woff');
+    }
 
 @font-face {
     font-family: AlteRegular;
