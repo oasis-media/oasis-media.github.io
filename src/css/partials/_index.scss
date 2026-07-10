@@ -1,46 +1,45 @@
 @font-face {
     font-family: Wahroonga;
-    src: url(/fonts/Wahroonga.ttf);
+    src: url(/fonts/Wahroonga.ttf) format('truetype'), 
+         url(/fonts/Wahroonga.ttf) format('woff2');
 }
 
 @font-face {
     font-family: Druk;
-    src: url(/fonts/Druk.ttf);
+    src: url('/fonts/Druk.woff2') format('woff2'),
+         url('/fonts/Druk.ttf') format('truetype');
 }
 
 @font-face {
     font-family: AlteRegular;
-    src: url(/fonts/AlteHaasGroteskRegular.ttf);
+    src: url(/fonts/AlteHaasGroteskRegular.ttf) format('truetype'), 
+         url(/fonts/AlteHaasGroteskRegular.ttf) format('woff2')
+    ;
 }
 
 @font-face {
     font-family: AlteBold;
-    src: url(/fonts/AlteHaasGroteskBold.ttf);
+    src: url('/fonts/AlteHaasGroteskBold.woff2') format('woff2'),
+         url('/fonts/AlteHaasGroteskBold.ttf') format('truetype');
 }
 
+
 @font-face {
-    font-family: Rowan;
-    src: url(/fonts/ROWAN-VARIABLE.ttf);
+    font-family: Garamond;
+    src: url('/fonts/GARA.woff2') format('woff2'),
+         url('/fonts/GARA.ttf') format('truetype');
 }
 
 @font-face {
     font-family: Garamond;
-    src: url(/fonts/GARA.TTF);
-}
-
-@font-face {
-    font-family: Garamond;
-    src: url(/fonts/GARA.TTF);
-}
-
-@font-face {
-    font-family: Garamond;
-    src: url(/fonts/GARAIT.TTF);
+    src: url('/fonts/GARAIT.woff2') format('woff2'),
+         url('/fonts/GARAIT.ttf') format('truetype');
     font-style: italic;
 }
 @font-face {
     font-family: Garamond;
-    src: url(/fonts/GARABD.TTF);
+    src: url('/fonts/GARABD.woff2') format('woff2'),
+         url('/fonts/GARABD.ttf') format('truetype');
     font-weight: bold;
 }
 
