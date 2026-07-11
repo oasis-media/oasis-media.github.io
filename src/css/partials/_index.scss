@@ -50,6 +50,16 @@
     font-weight: bold;
 }
 
+:root {
+    --title-font: 'Druk';
+}
+
+@media (max-width: 769px) {
+    :root {
+        --title-font: 'DrukBis';
+    }
+}
+
 img {
     width: auto;
     height: auto;
@@ -214,9 +224,9 @@ html {
 .menu-bg {
     display: none;
     .li {
-        font-family: 'Druk','DrukBis', sans-serif;
+        font-family: var(--title-font), serif;
         color: var(--bg);
-        transform: scaleY(1.38);
+        transform: scaleY(1.58);
         font-size: 2rem;
         position: absolute;
         bottom: 20px;
@@ -348,3 +358,15 @@ html {
 }
 
 
+@media (max-width: 769px) {
+    .menu-bg {
+        .li {
+            transform: scaleY(1.78);
+        letter-spacing: -1px;
+
+        h1 {
+            margin: -13px;
+        }
+        }
+    }
+}

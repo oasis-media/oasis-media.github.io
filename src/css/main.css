@@ -34,6 +34,15 @@
   src: url("/fonts/GARABD.woff2") format("woff2"), url("/fonts/GARABD.ttf") format("truetype");
   font-weight: bold;
 }
+:root {
+  --title-font: 'Druk';
+}
+
+@media (max-width: 769px) {
+  :root {
+    --title-font: 'DrukBis';
+  }
+}
 img {
   width: auto;
   height: auto;
@@ -181,9 +190,9 @@ html {
   display: none;
 }
 .menu-bg .li {
-  font-family: "Druk", "DrukBis", sans-serif;
+  font-family: var(--title-font), serif;
   color: var(--bg);
-  transform: scaleY(1.38);
+  transform: scaleY(1.58);
   font-size: 2rem;
   position: absolute;
   bottom: 20px;
@@ -302,6 +311,15 @@ html {
   display: block;
 }
 
+@media (max-width: 769px) {
+  .menu-bg .li {
+    transform: scaleY(1.78);
+    letter-spacing: -1px;
+  }
+  .menu-bg .li h1 {
+    margin: -13px;
+  }
+}
 #cardTitle {
   margin-top: 50px;
   transition: none;

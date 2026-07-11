@@ -85,6 +85,18 @@ if (!country) {
             </div>
         </div>
 
+        <script is:inline>
+        // Redirige avant le rendu si mobile/tactile
+        var isMobile = window.matchMedia("(max-width: 768px)").matches
+            || ('ontouchstart' in window);
+        if (isMobile) {
+            const hey = document.querySelector('div.flagInfo')
+            if(hey){
+                hey.style.display = "none"
+            }
+        }
+    </script>
+
         <script>
             var colors = [
                 ["#BC1919", "#FFF5F4"],
@@ -98,7 +110,11 @@ if (!country) {
                     ".titleInfo .line0",
                 ),
             ];
-
+                    const value = getComputedStyle(document.documentElement).getPropertyValue('--title-font');
+const text = document.querySelector<SVGTextElement>(".titleInfo text");
+if (text) {
+    text.style.fontFamily = value;
+}
             document.fonts.ready.then(() => {
                 var num = Math.floor(Math.random() * 5);
                 svgs.forEach((svg) => {
@@ -121,12 +137,22 @@ if (!country) {
 
                     svg.style.fill = colors[num][0];
                     const bbox = text.getBBox();
-                    svg.setAttribute(
-                        "viewBox",
-                        `0 0 ${bbox.width} ${bbox.height}`,
-                    );
+                    if(value=="Druk"){
+                            svg.setAttribute(
+                            "viewBox",
+                            `0 0 ${bbox.width} ${bbox.height}`,
+                        );
+                        text.setAttribute("y", String(bbox.height - 35));
+
+                        } else {
+                            svg.setAttribute(
+                            "viewBox",
+                            `0 0 ${bbox.width} ${bbox.height - 100}`,
+                        );
+                        text.setAttribute("y", String(bbox.height - 145));
+
+                        }
                     text.setAttribute("x", "0");
-                    text.setAttribute("y", String(bbox.height - 35));
                 });
             });
         </script>

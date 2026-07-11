@@ -4,19 +4,58 @@ import Head from "../layouts/Head.astro";
 import { Image } from 'astro:assets';
 
 import index from '.././assets/img/index.png';
+import countries from "../data/countries.json";
 
 interface Post {
     url: string;
     frontmatter: {
-        title: string;
-        type: string;
-        author: string;
+        code: string;
         [key: string]: any;
     };
 }
 
-const matches = import.meta.glob<Post>("./articles/*.md", { eager: true });
-const posts = Object.values(matches);
+interface Country {
+    alpha2Code: string;
+    region: string;
+    translations: { fr: string; [key: string]: string | null };
+    [key: string]: any;
+}
+
+const matches = import.meta.glob<Post>("./carte/*.md", { eager: true });
+const posts = Object.values(matches)
+
+
+const ids: string[] = [];
+posts.forEach((post: Post) => {
+    ids.push(post.frontmatter.code);
+});
+
+
+const matchedCountries = countries.filter((c) =>
+    ids.includes(c.alpha2Code)
+);
+
+interface PostData {
+    url: string;
+    code: string;
+    title: string;
+    region: string | undefined;
+}
+
+const data: PostData[] = posts.map((post: Post) => {
+    const country = matchedCountries.find(
+        (c) => c.alpha2Code === post.frontmatter.code
+    );
+    return {
+        url: post.url,
+        code: post.frontmatter.code,
+        title: post.frontmatter.country,
+        region: country?.region,
+    };
+});
+
+
+console.log(data)
 ---
 
 <html lang="fr">
@@ -27,7 +66,7 @@ const posts = Object.values(matches);
             name="viewport"
             content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
         />
-        <Head title="Articles" />
+        <Head title="Pays" />
     </head>
     <body>
         <MenuLayout />
@@ -37,41 +76,43 @@ const posts = Object.values(matches);
 
             </div>
             <div class="browseWrap">
+                <div class="contentWrapper">
                 {
-                    posts.map((post) => (
-                        <a href={post.url}>
-                            <div class="articleCard">
-                                <div class="leftInfo">
-                                    <p>{post.frontmatter.type}</p>
-                                </div>
-                                <div class="titleWrapper">
-                                    <div class="titleInfo">
-                                        <svg
-                                            class="line0"
-                                            width="100%"
-                                            height="100%"
-                                            viewBox="0 0 400 200"
-                                            preserveAspectRatio="none"
-                                        >
-                                            <text
-                                                x="0"
-                                                y="0"
-                                                font-size="400"
-                                                font-weight="900"
-                                                font-family="DrukBis"
-                                            >
-                                                {post.frontmatter.title}
-                                            </text>
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div class="authorInfo">
-                                    <p>{post.frontmatter.author}</p>
-                                </div>
-                            </div>
-                        </a>
-                    ))
+                    data.map((d) => (
+                        <a href={d.url}>
+            <div class="articleCard">
+                <div class="leftInfo">
+                    <p>{d.region}</p>
+                </div>
+                <div class="titleWrapper">
+                    <div class="titleInfo">
+                        <svg
+                            class="line0"
+                            width="100%"
+                            height="100%"
+                            viewBox="0 0 400 200"
+                            preserveAspectRatio="none"
+                        >
+                            <text
+                                x="0"
+                                y="0"
+                                font-size="400"
+                                font-weight="900"
+                                font-family="Druk, DrukBis"
+                            >
+                                {
+                                    d.title.toUpperCase()
+                                }
+                            </text>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flagInfo">
+                </div>
+            </div></a>
+        ))
                 }
+                </div>
             </div>
         </div>
 
@@ -86,7 +127,6 @@ const posts = Object.values(matches);
             ];
             const svgs = [...document.querySelectorAll<SVGElement>(".titleInfo .line0")];
                 const value = getComputedStyle(document.documentElement).getPropertyValue('--title-font');
-console.log(value); // ex: "Druk" ou "DrukBis"
 const text = document.querySelector<SVGTextElement>(".titleInfo text");
 if (text) {
     text.style.fontFamily = value;
