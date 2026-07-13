@@ -1,6 +1,7 @@
 ---
 import MenuLayout from "../layouts/MenuLayout.astro";
 import Head from "../layouts/Head.astro";
+import Top from "../layouts/Top.astro";
 const { title, date, author, type } = Astro.props.frontmatter;
 import { Image } from 'astro:assets';
 
@@ -11,14 +12,10 @@ import index from '.././assets/img/index.png';
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <Head title={title}></Head>
-    <link rel="stylesheet" href=".../css/tufte.css"/>
   </head>
   <body>
     <MenuLayout></MenuLayout>
-            <div class="topLogo">
-                                                        <Image src={index} alt=""/>
-
-            </div>
+            <Top/>
             <div class="contentWrapper">
             <div id="cardTitle" class=" articleCard">
                                 <div class="leftInfo">
@@ -38,7 +35,7 @@ import index from '.././assets/img/index.png';
                                                 y="0"
                                                 font-size="400"
                                                 font-weight="900"
-                                                font-family="Druk, DrukBis"
+                                                font-family="DrukBis"
                                             >
                                                 {title}
                                             </text>
@@ -58,35 +55,6 @@ import index from '.././assets/img/index.png';
         <div class="content"></div>
         </div>
 
-        <script>
-            const svg = document.querySelector<SVGSVGElement>(".titleInfo .line1");
-            const svg2 = document.querySelector<SVGSVGElement>(".titleInfo .line2");
-            if (!svg || !svg2) throw new Error("SVG elements not found");
-
-            const text = svg.querySelector("text");
-            const text2 = svg2.querySelector("text");
-            if (!text || !text2) throw new Error("text elements not found");
-
-            // Après chargement de la font
-            document.fonts.ready.then(() => {
-                const bbox = text.getBBox();
-                const bbox2 = text2.getBBox();
-
-                svg.setAttribute(
-                    "viewBox",
-                    `0 0 ${bbox.width}  ${bbox.height}`,
-                );
-                svg2.setAttribute(
-                    "viewBox",
-                    `0 0 ${bbox2.width} ${bbox2.height}`,
-                );
-
-                text.setAttribute("x", "0");
-                text.setAttribute("y", String(bbox.height - 20));
-                text2.setAttribute("x", "0");
-                text2.setAttribute("y", String(bbox2.height - 20));
-            });
-        </script>
         <script>
             var colors = [
                 ["#BC1919", "#FFF5F4"],
@@ -122,7 +90,7 @@ if (text) {
 
                     svg.style.fill = colors[num][0];
                     const bbox = text.getBBox();
-                    if(value=="Druk"){
+                    if(value=="'Druk'"){
                             svg.setAttribute(
                             "viewBox",
                             `0 0 ${bbox.width} ${bbox.height}`,
@@ -150,5 +118,7 @@ if (text) {
 })
             
         </script>
+
+        
   </body>
 </html>

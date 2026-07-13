@@ -8,8 +8,6 @@ html {
 
 .page {
 
-
-
     width: 87.5%;
     margin-left: auto;
     margin-right: auto;
@@ -222,7 +220,7 @@ img {
     font-style: italic;
     position: relative;
     vertical-align: baseline;
-    z-index: 9;
+    z-index: 7;
 }
 
 .sidenote-number:after {
@@ -407,7 +405,7 @@ label.margin-toggle:not(.sidenote-number) {
             width: 84%;
             justify-content: center;
             padding: 10px 0;
-            z-index: 11;
+            z-index: 9;
             
         }
 
@@ -417,7 +415,7 @@ label.margin-toggle:not(.sidenote-number) {
             width: 84%;
             justify-content: center;
             padding: 10px 0;
-            z-index: 11;
+            z-index: 9;
             float: left;
     margin-right: 0;
     

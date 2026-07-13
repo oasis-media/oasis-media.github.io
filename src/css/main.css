@@ -188,44 +188,51 @@ html {
 
 .menu-bg {
   display: none;
+  background-color: var(--accent);
 }
 .menu-bg .li {
   font-family: var(--title-font), serif;
   color: var(--bg);
-  transform: scaleY(1.58);
   font-size: 2rem;
   position: absolute;
   bottom: 20px;
   left: 30px;
   transform-origin: bottom;
 }
-.menu-bg .li h1 {
+.menu-bg .li div {
   margin: -10px;
+  margin-bottom: 30px;
   text-transform: uppercase;
-}
-.menu-bg .li h1 span {
-  transition: 0.3s ease;
-  color: var(--bg);
-  z-index: 12;
   position: relative;
 }
-.menu-bg .li h1 svg {
-  position: absolute;
+.menu-bg .li div span {
+  display: inline-block;
+  transform: scaleY(1.58);
+  transition: 0.3s ease;
+  color: var(--bg);
+  font-size: 64px;
   z-index: 11;
+  position: relative;
+}
+.menu-bg .li div svg {
+  position: absolute;
+  z-index: 12;
   top: -50px;
-  transform-origin: top;
+  transform-origin: center;
   left: 0;
   height: 150px;
   width: 150px;
   opacity: 0;
-  transform: scaleY(0.7246);
   transition: 0.3s ease;
+  pointer-events: none;
+  transform: rotate(10deg);
 }
-.menu-bg .li h1:hover span {
+.menu-bg .li div:hover span {
   letter-spacing: 2px;
 }
-.menu-bg .li h1:hover svg {
+.menu-bg .li div:hover svg {
   opacity: 1;
+  transform: rotate(40deg);
 }
 
 .indexBg {
@@ -262,13 +269,18 @@ html {
     width: 90vw;
   }
 }
+@media (max-height: 550px) {
+  .indexLogo {
+    width: 60vw;
+  }
+}
 @media (max-width: 768px) and (max-aspect-ratio: 11/11) {
   .indexSvg {
     width: 70vw;
     bottom: 70px;
   }
 }
-@media (max-width: 550px) {
+@media (max-width: 550px) or (max-height: 550px) {
   .menu, .close {
     height: 80px;
     width: 80px;
@@ -276,13 +288,11 @@ html {
   .menu-bg .li {
     font-size: 1.2rem;
   }
-  .menu-bg .li h1 {
-    margin: -5px;
+  .menu-bg .li div svg {
+    display: none;
   }
-  .menu-bg .li h1 svg {
-    height: 50px;
-    margin-left: -10px;
-    margin-top: 20px;
+  .menu-bg .li div span {
+    font-size: 32px;
   }
 }
 .cursorSvg {
@@ -312,12 +322,9 @@ html {
 }
 
 @media (max-width: 769px) {
-  .menu-bg .li {
+  .menu-bg .li span {
     transform: scaleY(1.78);
     letter-spacing: -1px;
-  }
-  .menu-bg .li h1 {
-    margin: -13px;
   }
 }
 #cardTitle {
@@ -332,6 +339,9 @@ html {
     height: 90px;
     grid-template-columns: 30px 1fr 60px;
     font-size: 10px;
+  }
+  #cardTitle svg {
+    height: 90px;
   }
 }
 #map {
@@ -568,6 +578,9 @@ svg#map .cls-6 {
   font-family: "AlteRegular", sans-serif, monospace;
   color: var(--bg);
 }
+.contentWrapper .articleCard .titleWrapper {
+  height: 100%;
+}
 .contentWrapper .articleCard .titleInfo {
   width: 80%;
   height: 100%;
@@ -578,7 +591,9 @@ svg#map .cls-6 {
   transform-origin: left;
 }
 .contentWrapper .articleCard .titleInfo svg {
+  display: block;
   fill: var(--bg);
+  height: 180px;
 }
 .contentWrapper .articleCard .titleInfo .line1, .contentWrapper .articleCard .titleInfo .line2 {
   height: 50%;
@@ -608,6 +623,9 @@ svg#map .cls-6 {
     height: 90px;
     grid-template-columns: 30px 1fr 60px;
     font-size: 10px;
+  }
+  .contentWrapper .browseWrap .articleCard svg {
+    height: 90px;
   }
 }
 /* Tufte CSS styles */
@@ -806,7 +824,7 @@ html {
   font-style: italic;
   position: relative;
   vertical-align: baseline;
-  z-index: 9;
+  z-index: 7;
 }
 .page .sidenote-number:after {
   content: counter(sidenote-counter);
@@ -957,7 +975,7 @@ html {
     width: 84%;
     justify-content: center;
     padding: 10px 0;
-    z-index: 11;
+    z-index: 9;
   }
   .page .marginnote {
     position: relative;
@@ -965,7 +983,7 @@ html {
     width: 84%;
     justify-content: center;
     padding: 10px 0;
-    z-index: 11;
+    z-index: 9;
     float: left;
     margin-right: 0;
     margin-top: 0;

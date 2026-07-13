@@ -1,6 +1,7 @@
 ---
 import MenuLayout from "../layouts/MenuLayout.astro";
 import Head from "../layouts/Head.astro";
+import Top from "../layouts/Top.astro";
 import { Image } from 'astro:assets';
 
 import index from '.././assets/img/index.png';
@@ -71,12 +72,8 @@ console.log(data)
     <body>
         <MenuLayout />
         <div class="contentWrapper">
-            <div class="topLogo">
-            <Image src={index} alt=""/>
-
-            </div>
+            <Top/>
             <div class="browseWrap">
-                <div class="contentWrapper">
                 {
                     data.map((d) => (
                         <a href={d.url}>
@@ -98,7 +95,7 @@ console.log(data)
                                 y="0"
                                 font-size="400"
                                 font-weight="900"
-                                font-family="Druk, DrukBis"
+                                font-family="DrukBis"
                             >
                                 {
                                     d.title.toUpperCase()
@@ -112,7 +109,6 @@ console.log(data)
             </div></a>
         ))
                 }
-                </div>
             </div>
         </div>
 
@@ -127,20 +123,18 @@ console.log(data)
             ];
             const svgs = [...document.querySelectorAll<SVGElement>(".titleInfo .line0")];
                 const value = getComputedStyle(document.documentElement).getPropertyValue('--title-font');
-const text = document.querySelector<SVGTextElement>(".titleInfo text");
-if (text) {
-    text.style.fontFamily = value;
-}
-            document.fonts.ready.then(() => {
-                var tot = colors.length - 1;
-                var tic = 0;
-                svgs.forEach((svg) => {
-                    while (tic > tot) {
-                        tic = tic - tot - 1;
-                    }
-                    if (!svg) return;
-                    const text = svg.querySelector("text");
-                    if (!text) return;
+
+document.fonts.ready.then(() => {
+    var tot = colors.length - 1;
+    var tic = 0;
+    svgs.forEach((svg) => {
+        while (tic > tot) {
+            tic = tic - tot - 1;
+        }
+        if (!svg) return;
+        const text = svg.querySelector("text");
+        if (!text) return;
+        text.style.fontFamily = value;
                     if(svg.parentElement && svg.parentElement.parentElement && svg.parentElement.parentElement.parentElement){
                         const par = svg.parentElement.parentElement.parentElement ;
                         par.style.backgroundColor = colors[tic][1];
@@ -154,7 +148,7 @@ if (text) {
                         svg.style.fill = colors[tic][0];
                         const bbox = text.getBBox();
 
-                        if(value=="Druk"){
+                        if(value=="'Druk'"){
                             svg.setAttribute(
                             "viewBox",
                             `0 0 ${bbox.width} ${bbox.height}`,

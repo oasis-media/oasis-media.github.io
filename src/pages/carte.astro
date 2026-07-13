@@ -1,54 +1,51 @@
 ---
 import MenuLayout from "../layouts/MenuLayout.astro";
 import Head from "../layouts/Head.astro";
-import { Image } from 'astro:assets';
+import { Image } from "astro:assets";
 
 const matches = import.meta.glob("./carte/*.md", { eager: true });
 const countries = Object.values(matches);
 
-import noise from '.././assets/img/noise.png';
-import star from '.././assets/img/star-centre-v2.png';
-import json from '.././data/countries.json'
-
+import noise from ".././assets/img/noise.png";
+import star from ".././assets/img/star-centre-v2.png";
+import json from ".././data/countries.json";
 ---
 
-<html lang="en">
+<html lang="fr">
     <head>
         <script is:inline>
-        // Redirige avant le rendu si mobile/tactile
-        var isMobile = window.matchMedia("(max-width: 768px)").matches
-            || ('ontouchstart' in window);
-        if (isMobile) {
-            window.location.replace("/carte-mobile");
-        }
-    </script>
+            // Redirige avant le rendu si mobile/tactile
+            var isMobile =
+                window.matchMedia("(max-width: 768px)").matches ||
+                "ontouchstart" in window;
+            if (isMobile) {
+                window.location.replace("/carte-mobile");
+            }
+        </script>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width" />
         <meta
             name="viewport"
             content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-            />
-            <Head title="Carte" />
-        </head>
-        <body
-        style="overflow:hidden; height:100dvh;width:100vw;"
-        >
+        />
+        <Head title="Carte" />
+    </head>
+    <body style="overflow:hidden; height:100dvh;width:100vw;">
         <style>
-
             body {
-                position : relative
+                position: relative;
             }
 
             body::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: url("/atlas-stripes.svg");
-    background-repeat: repeat;
-    opacity: 0.25;
-    filter: blur(1px);
-    z-index: -1;
-}
+                content: "";
+                position: absolute;
+                inset: 0;
+                background-image: url("/atlas-stripes.svg");
+                background-repeat: repeat;
+                opacity: 0.25;
+                filter: blur(1px);
+                z-index: -1;
+            }
         </style>
         <MenuLayout />
         <Image src={star} id="star-centre" alt="" />
@@ -1353,7 +1350,6 @@ import json from '.././data/countries.json'
         >
         <div class="bottom">
             <div class="info">
-
                 <p class="country">
                     les pays fichés ont <span>cette couleur</span>
                 </p>
@@ -1361,7 +1357,8 @@ import json from '.././data/countries.json'
             <p>cliquer sur un <span>pays</span> pour découvrir</p>
         </div>
 
-        <script  src="https://unpkg.com/svg-pan-zoom/dist/svg-pan-zoom.min.js"></script>
+        <script src="https://unpkg.com/svg-pan-zoom/dist/svg-pan-zoom.min.js"
+        ></script>
         <script type="text/javascript" is:inline>
             window.addEventListener("DOMContentLoaded", () => {
                 var svgElement = document.querySelector("#map");
@@ -1375,7 +1372,7 @@ import json from '.././data/countries.json'
             });
         </script>
         <script type="text/javascript" define:vars={{ countries, json }}>
-            let dataArray = json
+            let dataArray = json;
             const fiche = [];
             countries.forEach((country) => {
                 fiche.push(country.frontmatter.code);
@@ -1390,8 +1387,8 @@ import json from '.././data/countries.json'
 
             const alls = [...el1, ...el2, ...el3, ...el4, ...el5, ...el6];
             const info = document.querySelector(".country");
-           
- alls.map((a) => {
+
+            alls.map((a) => {
                 a.style.fill = "black";
                 if (fiche.includes(a.parentElement.id)) {
                     a.style.fill = "#BC1919";

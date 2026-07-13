@@ -39,8 +39,12 @@
                     transform: rotate(-90deg);
                     font-family: 'AlteRegular', sans-serif, monospace;
                     color: var(--bg);
-
+ 
                 }
+            }
+
+            .titleWrapper {
+                height: 100%;
             }
 
             .titleInfo {
@@ -53,8 +57,9 @@
                 transform-origin: left;
 
                 svg {
-                    
+                    display: block;
                     fill: var(--bg);
+                    height: 180px;
                 }
 
                 .line1, .line2 {
@@ -99,5 +104,9 @@
         height: 90px;
         grid-template-columns: 30px 1fr 60px;
         font-size: 10px;
+
+        svg {
+            height: 90px;
+        }
     }
 }

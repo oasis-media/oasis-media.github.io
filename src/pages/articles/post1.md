@@ -1,6 +1,6 @@
 ---
 layout: "../../layouts/PageLayout.astro"
-title: "SURVEILLER ET PUNIR"
+title: "TOGO"
 date: "07/01/26"
 auteur: "célian chauveau"
 author: "michel foucault"

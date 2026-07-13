@@ -1,6 +1,7 @@
 ---
 import MenuLayout from "../layouts/MenuLayout.astro";
 import Head from "../layouts/Head.astro";
+import Top from "../layouts/Top.astro";
 import { Image } from "astro:assets";
 
 import index from ".././assets/img/index.png";
@@ -15,8 +16,6 @@ interface Country {
     [key: string]: any;
 }
 
-// countries.json est dans /public, donc on le lit directement via fs
-// plutôt que de l'importer comme module (import ne fonctionne que pour src/)
 import countries from "../data/countries.json";
 
 let country: Country | undefined;
@@ -31,7 +30,7 @@ if (!country) {
 }
 ---
 
-<html lang="en">
+<html lang="fr">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width" />
@@ -41,9 +40,7 @@ if (!country) {
     <body>
         <MenuLayout />
 
-        <div class="topLogo">
-            <Image src={index} alt="" />
-        </div>
+        <Top />
 
         <div class="contentWrapper">
             <div id="cardTitle" class="articleCard">
@@ -64,7 +61,7 @@ if (!country) {
                                 y="0"
                                 font-size="400"
                                 font-weight="900"
-                                font-family="Druk, DrukBis"
+                                font-family="DrukBis"
                             >
                                 {
                                     country.translations.fr
@@ -85,17 +82,6 @@ if (!country) {
             </div>
         </div>
 
-        <script is:inline>
-        // Redirige avant le rendu si mobile/tactile
-        var isMobile = window.matchMedia("(max-width: 768px)").matches
-            || ('ontouchstart' in window);
-        if (isMobile) {
-            const hey = document.querySelector('div.flagInfo')
-            if(hey){
-                hey.style.display = "none"
-            }
-        }
-    </script>
 
         <script>
             var colors = [
@@ -112,10 +98,8 @@ if (!country) {
             ];
                     const value = getComputedStyle(document.documentElement).getPropertyValue('--title-font');
 const text = document.querySelector<SVGTextElement>(".titleInfo text");
-if (text) {
-    text.style.fontFamily = value;
-}
-            document.fonts.ready.then(() => {
+
+document.fonts.ready.then(() => {
                 var num = Math.floor(Math.random() * 5);
                 svgs.forEach((svg) => {
                     if (!svg) return;
@@ -135,9 +119,10 @@ if (text) {
                             pct + "%";
                     }
 
+                    text.style.fontFamily = value;
                     svg.style.fill = colors[num][0];
                     const bbox = text.getBBox();
-                    if(value=="Druk"){
+                    if(value=="'Druk'"){
                             svg.setAttribute(
                             "viewBox",
                             `0 0 ${bbox.width} ${bbox.height}`,

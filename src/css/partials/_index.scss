@@ -105,6 +105,8 @@ html {
     scrollbar-color: #BC1919 transparent;
 }
 
+
+
 .menu {
     height: 150px;
     width: 150px;
@@ -223,47 +225,53 @@ html {
 
 .menu-bg {
     display: none;
+    background-color: var(--accent);
     .li {
         font-family: var(--title-font), serif;
         color: var(--bg);
-        transform: scaleY(1.58);
         font-size: 2rem;
         position: absolute;
         bottom: 20px;
         left: 30px;
         transform-origin: bottom;
         
-        h1 {
+        div {
             margin: -10px;
+            margin-bottom: 30px;
             text-transform: uppercase;
+            position: relative;
             span {
+                display: inline-block;
+                transform: scaleY(1.58);
                 transition: 0.3s ease;
                 color: var(--bg);
-
-                    z-index: 12;
+                font-size: 64px;
+                    z-index: 11;
                     position: relative;
             }
 
             svg {
                 position: absolute;
-                z-index: 11;
+                z-index: 12;
                 top: -50px;
-                transform-origin: top;
+                transform-origin: center;
                 left: 0;
                 height: 150px;
                 width: 150px;
                 opacity: 0;
-                transform: scaleY(0.7246);
                 transition: 0.3s ease;
+                pointer-events: none;
+                transform: rotate(10deg);
             }
         }
 
-        h1:hover {
+        div:hover {
             span {
                 letter-spacing: 2px;
             }
             svg {
                 opacity: 1;
+                transform: rotate(40deg);
             }
         }
     }
@@ -305,6 +313,12 @@ html {
   }
 }
 
+@media (max-height: 550px) {
+  .indexLogo {
+    width: 60vw;
+  }
+}
+
 @media (max-width: 768px) and (max-aspect-ratio: 11/11){
     .indexSvg {
         width: 70vw;
@@ -313,7 +327,7 @@ html {
 
 }
 
-@media (max-width: 550px) {
+@media (max-width: 550px) or (max-height: 550px)  {
     .menu, .close {
         height: 80px;
         width: 80px;
@@ -321,12 +335,12 @@ html {
 
     .menu-bg .li {
         font-size: 1.2rem;
-        h1 {
-            margin: -5px;
+        div {
             svg {
-                height: 50px;
-                margin-left: -10px;
-                margin-top: 20px;
+                display: none;
+        }
+        span {
+            font-size: 32px;
         }
     }
 }}
@@ -360,13 +374,10 @@ html {
 
 @media (max-width: 769px) {
     .menu-bg {
-        .li {
+        .li span {
             transform: scaleY(1.78);
         letter-spacing: -1px;
 
-        h1 {
-            margin: -13px;
-        }
         }
     }
 }

@@ -1,6 +1,7 @@
 ---
 import MenuLayout from "../layouts/MenuLayout.astro";
 import Head from "../layouts/Head.astro";
+import Top from "../layouts/Top.astro";
 import { Image } from 'astro:assets';
 
 import index from '.././assets/img/index.png';
@@ -32,10 +33,7 @@ const posts = Object.values(matches);
     <body>
         <MenuLayout />
         <div class="contentWrapper">
-            <div class="topLogo">
-            <Image src={index} alt=""/>
-
-            </div>
+            <Top/>
             <div class="browseWrap">
                 {
                     posts.map((post) => (
@@ -86,12 +84,8 @@ const posts = Object.values(matches);
             ];
             const svgs = [...document.querySelectorAll<SVGElement>(".titleInfo .line0")];
                 const value = getComputedStyle(document.documentElement).getPropertyValue('--title-font');
-console.log(value); // ex: "Druk" ou "DrukBis"
-const text = document.querySelector<SVGTextElement>(".titleInfo text");
-if (text) {
-    text.style.fontFamily = value;
-}
-            document.fonts.ready.then(() => {
+
+document.fonts.ready.then(() => {
                 var tot = colors.length - 1;
                 var tic = 0;
                 svgs.forEach((svg) => {
@@ -101,6 +95,7 @@ if (text) {
                     if (!svg) return;
                     const text = svg.querySelector("text");
                     if (!text) return;
+                    text.style.fontFamily = value;
                     if(svg.parentElement && svg.parentElement.parentElement && svg.parentElement.parentElement.parentElement){
                         const par = svg.parentElement.parentElement.parentElement ;
                         par.style.backgroundColor = colors[tic][1];
@@ -114,7 +109,7 @@ if (text) {
                         svg.style.fill = colors[tic][0];
                         const bbox = text.getBBox();
 
-                        if(value=="Druk"){
+                        if(value == "'Druk'"){
                             svg.setAttribute(
                             "viewBox",
                             `0 0 ${bbox.width} ${bbox.height}`,
@@ -122,6 +117,7 @@ if (text) {
                         text.setAttribute("y", String(bbox.height - 35));
 
                         } else {
+
                             svg.setAttribute(
                             "viewBox",
                             `0 0 ${bbox.width} ${bbox.height - 100}`,
