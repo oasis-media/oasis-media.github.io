@@ -32,9 +32,6 @@ if (!country) {
 
 <html lang="fr">
     <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width" />
-        <meta name="generator" content={Astro.generator} />
         <Head title={country.translations.fr} />
     </head>
     <body>
@@ -144,6 +141,7 @@ document.fonts.ready.then(() => {
         <div class="page">
             <article>
                 <slot />
+                <section class="endnoteWrap"></section>
             </article>
         </div>
 

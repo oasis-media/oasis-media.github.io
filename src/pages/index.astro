@@ -1,28 +1,21 @@
 ---
 import MenuLayout from "../layouts/MenuLayout.astro";
 import Head from "../layouts/Head.astro";
-import { Image } from 'astro:assets';
+import { Image } from "astro:assets";
 
-import index from '.././assets/img/indexlogo.png';
-
+import index from ".././assets/img/indexlogo.png";
 ---
 
 <html lang="fr">
     <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width" />
         <Head title="Accueil" />
-
     </head>
-    <body
-        style=" height:100dvh;width:100vw; background-color: 000"
-    >
+    <body style=" height:100dvh;width:100vw; background-color: 000">
         <MenuLayout />
 
         <div class="indexBg">
             <div class="indexLogo">
-                                        <Image src={index} alt=""/>
-
+                <Image src={index} alt="" />
             </div>
         </div>
         <a href="/browse">

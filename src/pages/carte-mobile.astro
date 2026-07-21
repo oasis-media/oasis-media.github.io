@@ -2,9 +2,6 @@
 import MenuLayout from "../layouts/MenuLayout.astro";
 import Head from "../layouts/Head.astro";
 import Top from "../layouts/Top.astro";
-import { Image } from 'astro:assets';
-
-import index from '.././assets/img/index.png';
 import countries from "../data/countries.json";
 
 interface Post {
@@ -15,27 +12,6 @@ interface Post {
     };
 }
 
-interface Country {
-    alpha2Code: string;
-    region: string;
-    translations: { fr: string; [key: string]: string | null };
-    [key: string]: any;
-}
-
-const matches = import.meta.glob<Post>("./carte/*.md", { eager: true });
-const posts = Object.values(matches)
-
-
-const ids: string[] = [];
-posts.forEach((post: Post) => {
-    ids.push(post.frontmatter.code);
-});
-
-
-const matchedCountries = countries.filter((c) =>
-    ids.includes(c.alpha2Code)
-);
-
 interface PostData {
     url: string;
     code: string;
@@ -43,9 +19,19 @@ interface PostData {
     region: string | undefined;
 }
 
+const matches = import.meta.glob<Post>("./carte/*.md", { eager: true });
+const posts = Object.values(matches);
+
+const ids: string[] = [];
+posts.forEach((post: Post) => {
+    ids.push(post.frontmatter.code);
+});
+
+const matchedCountries = countries.filter((c) => ids.includes(c.alpha2Code));
+
 const data: PostData[] = posts.map((post: Post) => {
     const country = matchedCountries.find(
-        (c) => c.alpha2Code === post.frontmatter.code
+        (c) => c.alpha2Code === post.frontmatter.code,
     );
     return {
         url: post.url,
@@ -54,122 +40,52 @@ const data: PostData[] = posts.map((post: Post) => {
         region: country?.region,
     };
 });
-
-
-console.log(data)
 ---
 
 <html lang="fr">
     <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width" />
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-        />
         <Head title="Pays" />
     </head>
     <body>
         <MenuLayout />
         <div class="contentWrapper">
-            <Top/>
+            <Top />
             <div class="browseWrap">
                 {
                     data.map((d) => (
                         <a href={d.url}>
-            <div class="articleCard">
-                <div class="leftInfo">
-                    <p>{d.region}</p>
-                </div>
-                <div class="titleWrapper">
-                    <div class="titleInfo">
-                        <svg
-                            class="line0"
-                            width="100%"
-                            height="100%"
-                            viewBox="0 0 400 200"
-                            preserveAspectRatio="none"
-                        >
-                            <text
-                                x="0"
-                                y="0"
-                                font-size="400"
-                                font-weight="900"
-                                font-family="DrukBis"
-                            >
-                                {
-                                    d.title.toUpperCase()
-                                }
-                            </text>
-                        </svg>
-                    </div>
-                </div>
-                <div class="flagInfo">
-                </div>
-            </div></a>
-        ))
+                            <div class="articleCard">
+                                <div class="leftInfo">
+                                    <p>{d.region}</p>
+                                </div>
+                                <div class="titleWrapper">
+                                    <div class="titleInfo">
+                                        <svg
+                                            class="line0"
+                                            width="100%"
+                                            height="100%"
+                                            viewBox="0 0 400 200"
+                                            preserveAspectRatio="none"
+                                        >
+                                            <text
+                                                x="0"
+                                                y="0"
+                                                font-size="400"
+                                                font-weight="900"
+                                                font-family="DrukBis"
+                                            >
+                                                {d.title.toUpperCase()}
+                                            </text>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="flagInfo"></div>
+                            </div>
+                        </a>
+                    ))
                 }
             </div>
         </div>
 
-        
-        <script>
-            var colors = [
-                ["#BC1919", "#FFF5F4"],
-                ["#FFF5F4", "#BC1919"],
-                ["black", "#FFF5F4"],
-                ["#FFF5F4", "black"],
-                ["black", "#BC1919"],
-            ];
-            const svgs = [...document.querySelectorAll<SVGElement>(".titleInfo .line0")];
-                const value = getComputedStyle(document.documentElement).getPropertyValue('--title-font');
-
-document.fonts.ready.then(() => {
-    var tot = colors.length - 1;
-    var tic = 0;
-    svgs.forEach((svg) => {
-        while (tic > tot) {
-            tic = tic - tot - 1;
-        }
-        if (!svg) return;
-        const text = svg.querySelector("text");
-        if (!text) return;
-        text.style.fontFamily = value;
-                    if(svg.parentElement && svg.parentElement.parentElement && svg.parentElement.parentElement.parentElement){
-                        const par = svg.parentElement.parentElement.parentElement ;
-                        par.style.backgroundColor = colors[tic][1];
-                        const parPs = [...par.querySelectorAll("p")];
-                        parPs.forEach((parP) => {
-                            parP.style.color = colors[tic][0];
-                        });
-                        const pct = Math.floor(Math.random() * 16) + 70;
-                        svg.parentElement.style.width = pct + "%";
-    
-                        svg.style.fill = colors[tic][0];
-                        const bbox = text.getBBox();
-
-                        if(value=="'Druk'"){
-                            svg.setAttribute(
-                            "viewBox",
-                            `0 0 ${bbox.width} ${bbox.height}`,
-                        );
-                        text.setAttribute("y", String(bbox.height - 35));
-
-                        } else {
-                            svg.setAttribute(
-                            "viewBox",
-                            `0 0 ${bbox.width} ${bbox.height - 100}`,
-                        );
-                        text.setAttribute("y", String(bbox.height - 145));
-
-                        }
-
-                        
-                        text.setAttribute("x", "0");
-                        tic = tic + 1;
-                    }
-                });
-            });
-        </script>
     </body>
 </html>

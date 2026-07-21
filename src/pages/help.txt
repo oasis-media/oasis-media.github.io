@@ -1,22 +1,3 @@
-const posts = await Astro.glob<{ title: string; sum: string }>("./data/*.md");
-
-
-
-{
-                        posts.map((post) => (
-                            <a href={post.url}>
-                                <div class="card">
-                                    <h1>
-                                        <span>{post.frontmatter.title}</span>
-                                    </h1>
-                                    <p>{post.frontmatter.sum}</p>
-                                    <img src="../img/noise.png" alt="" />
-                                </div>
-                            </a>
-                        ))
-                    }
-
-
 
 
 <svg class="line0" width="100%" height="100%" viewBox="0 0 400 200" preserveAspectRatio="none">
@@ -39,7 +20,44 @@ const posts = await Astro.glob<{ title: string; sum: string }>("./data/*.md");
         </svg>
 
 
+<script>
+            const svg = document.querySelector(".titleInfo .line1");
+            const svg2 = document.querySelector(".titleInfo .line2");
+            if (!svg || !svg2) {
+            } else {
+                const text = svg.querySelector("text");
+                const text2 = svg2.querySelector("text");
 
+                if(!text || !text2){
+
+                } else {
+                    document.fonts.ready.then(() => {
+                        const bbox = text.getBBox();
+                        const bbox2 = text2.getBBox();
+    
+                        svg.setAttribute(
+                            "viewBox",
+                            `0 0 ${bbox.width}  ${bbox.height}`,
+                        );
+                        svg2.setAttribute(
+                            "viewBox",
+                            `0 0 ${bbox2.width} ${bbox2.height}`,
+                        );
+
+                        if(!bbox || !bbox2){
+
+                        } else {
+
+                        text.setAttribute("x", "0");
+                        text.setAttribute("y", String(bbox.height - 20));
+                        text2.setAttribute("x", "0");
+                        text2.setAttribute("y", String(bbox2.height - 20));
+                        }
+    
+                    });
+                }
+            }
+        </script>
 
 
 <div class="cursorSvg">

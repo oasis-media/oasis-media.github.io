@@ -6,15 +6,14 @@ import { Image } from "astro:assets";
 const matches = import.meta.glob("./carte/*.md", { eager: true });
 const countries = Object.values(matches);
 
-import noise from ".././assets/img/noise.png";
 import star from ".././assets/img/star-centre-v2.png";
 import json from ".././data/countries.json";
 ---
 
 <html lang="fr">
     <head>
+        /* Script pour détecter si c'est un mobile, et si c'est le cas rediriger vers /carte-mobile */
         <script is:inline>
-            // Redirige avant le rendu si mobile/tactile
             var isMobile =
                 window.matchMedia("(max-width: 768px)").matches ||
                 "ontouchstart" in window;
@@ -22,15 +21,9 @@ import json from ".././data/countries.json";
                 window.location.replace("/carte-mobile");
             }
         </script>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width" />
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-        />
         <Head title="Carte" />
     </head>
-    <body style="overflow:hidden; height:100dvh;width:100vw;">
+    <body style="overflow:hidden; height:100dvh; width:100vw;">
         <style>
             body {
                 position: relative;
@@ -49,6 +42,8 @@ import json from ".././data/countries.json";
         </style>
         <MenuLayout />
         <Image src={star} id="star-centre" alt="" />
+
+        /* Carte en svg */
         <svg
             xmlns="http://www.w3.org/2000/svg"
             id="map"
@@ -1357,8 +1352,9 @@ import json from ".././data/countries.json";
             <p>cliquer sur un <span>pays</span> pour découvrir</p>
         </div>
 
-        <script src="https://unpkg.com/svg-pan-zoom/dist/svg-pan-zoom.min.js"
-        ></script>
+        /* Gestion du pan/zoom */
+        <script src="https://unpkg.com/svg-pan-zoom/dist/svg-pan-zoom.min.js"></script>
+        
         <script type="text/javascript" is:inline>
             window.addEventListener("DOMContentLoaded", () => {
                 var svgElement = document.querySelector("#map");
@@ -1371,6 +1367,8 @@ import json from ".././data/countries.json";
                 });
             });
         </script>
+
+        /* Gestion des couleurs de la carte */
         <script type="text/javascript" define:vars={{ countries, json }}>
             let dataArray = json;
             const fiche = [];
@@ -1430,5 +1428,6 @@ import json from ".././data/countries.json";
                 });
             });
         </script>
+
     </body>
 </html>

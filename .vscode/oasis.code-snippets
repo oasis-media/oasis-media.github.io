@@ -2,19 +2,40 @@
   "Sidenote": {
     "prefix": "sidenote",
     "body": [
-      "{% sidenote id=\"$1\" %}",
-      "$2",
-      "{% /sidenote %}"
+      "<label for='' class='margin-toggle sidenote-number'></label>",
+      "<input type='checkbox' id='' class='margin-toggle'/>",
+      "<span class='sidenote'>",
+      "$1",
+      "</span>"
     ],
-    "description": "Insert a sidenote tag"
+    "description": "Insère une note !"
   },
-  "Epigraph": {
-    "prefix": "epigraph",
+  "Section": {
+    "prefix": "section",
     "body": [
-      "{% epigraph author=\"$1\" %}",
-      "$2",
-      "{% /epigraph %}"
+      "<section>",
+      "$1",
+      "</section>"
     ],
-    "description": "Insert an epigraph tag"
+    "description": "Insère ton contenu"
+  },
+  "Citation": {
+    "prefix": "citation",
+    "body": [
+      "<div class='epigraph'>",
+      "<blockquote>$1</blockquote>",
+      "<footer>$2</footer>",
+      "</div>"
+    ],
+    "description": "Insère une citation (dans le footer tu peux mettre la source)"
+  },
+  "Bandeau de Parti Politique": {
+    "prefix": "bandeaupol",
+    "body": [
+      "<div class='bandeauPol' data-sample='[$1]'>",
+      "<img src='/$2/$3.png'>",
+      "</div>"
+    ],
+    "description": "Insère un bandeau d'un parti politique : 1) dans data-sample, renseigne les noms possibles du partis dans les différents parlements, 2) met le raccourci du logo (dispo dans public/<pays>/<parti>.png"
   }
 }

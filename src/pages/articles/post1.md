@@ -7,4 +7,22 @@ author: "michel foucault"
 type: "lecture"
 sum: "Bonjour Romain, Avant tout, on espère que tu as passé de bonnes fêtes !"
 ---
-hey
+
+
+<section>
+
+## Hey
+
+data i guess <label for='' class='margin-toggle sidenote-number'></label>
+<input type='checkbox' id='' class='margin-toggle'/>
+<span class='sidenote'>
+not surrrr
+</span>
+
+more data <label for='' class='margin-toggle sidenote-number'></label>
+<input type='checkbox' id='' class='margin-toggle'/>
+<span class='sidenote'>
+i am sure
+</span>
+
+</section>

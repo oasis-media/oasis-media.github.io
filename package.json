@@ -15,6 +15,12 @@
   "type": "commonjs",
   "dependencies": {
     "@astrojs/markdoc": "^2.0.3",
-    "astro": "^7.0.7"
+    "@parliamentarch/core": "^5.1.0",
+    "@parliamentarch/svg": "^5.1.1",
+    "astro": "^7.0.7",
+    "jsdom": "^29.1.1"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^28.0.3"
   }
 }

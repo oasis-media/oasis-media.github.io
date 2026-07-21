@@ -1,0 +1,30 @@
+---
+import { JSDOM } from 'jsdom';
+globalThis.document = new JSDOM().window.document;
+
+import * as parliamentarch from '@parliamentarch/svg';
+
+const attribution = new Map([
+    [{id:"PCF", color: "#DD0000"}, 17],
+    [{id:"PCF",color: "#cc2443"}, 71],
+    [{id:"PF",color: "#00c000"}, 38],
+    [{id:"PCF",color: "#ff8080"}, 66],
+    [{id:"PR",color: "#e1a5e1"}, 23],
+    [{id:"PCF",color: "#ff9900"}, 36],
+    [{id:"PCF",color: "#ffeb00"}, 93],
+    [{id:"EELV",color: "#0001b8"}, 34]
+]);
+const svgElement = parliamentarch.getSVGFromAttribution(attribution,
+ {
+   seatNumberFontSizeFactor:0,
+   majorityLines:[
+   {
+     color:"black",
+     width:1
+   }
+ ]
+ });
+const svgString = svgElement.outerHTML;
+---
+
+<Fragment class="parliement" set:html={svgString}/>

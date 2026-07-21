@@ -9,8 +9,6 @@ import index from '.././assets/img/index.png';
 ---
 <html lang="fr">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <Head title={title}></Head>
   </head>
   <body>
@@ -50,9 +48,13 @@ import index from '.././assets/img/index.png';
         <div class="page">
             <article>
                 <slot/>
+        <div class="bigAssMargin"></div>
+
+                <section class="endnoteWrap"></section>
             </article>
         </div>
-        <div class="content"></div>
+        <div class="bigAssMargin"></div>
+      
         </div>
 
         <script>
@@ -110,13 +112,24 @@ if (text) {
             });
         </script>
         <script>
-            const ow = [...document.querySelectorAll(".endnote")];
-            ow.forEach((p, index) => {
-    p.addEventListener('click', () => {
-        document.getElementById(`sn-${index + 1}`)?.previousElementSibling?.scrollIntoView()
-    })
-})
-            
+            const sew = document.querySelector(".endnoteWrap");
+            const labels = [...document.querySelectorAll('label')]
+            labels.forEach((label, index)=> {
+                label.setAttribute('for', `sn-${index + 1}`)
+                if(!label.nextElementSibling) return 
+                label.nextElementSibling.id = "sn-" + (index + 1)
+                if(!label.nextElementSibling.nextElementSibling) return 
+                const content = label.nextElementSibling.nextElementSibling.innerHTML
+                if(!sew) return;
+                const sp = document.createElement('span')
+                sp.classList.add('endnote')
+                sp.innerHTML = content
+                sew.appendChild(sp)
+                sp.addEventListener('click', () => {
+                    label.scrollIntoView()
+                })
+
+            })
         </script>
 
         
