@@ -6,3 +6,15 @@ dist/
 
 # dependencies
 node_modules/
+
+# environment variables
+.env
+.env.production
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# editor
+.vscode/*
+!.vscode/extensions.json
