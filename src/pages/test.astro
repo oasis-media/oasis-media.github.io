@@ -1,5 +1,7 @@
 ---
 import { JSDOM } from 'jsdom';
+import Head from "../layouts/Head.astro";
+
 globalThis.document = new JSDOM().window.document;
 
 import * as parliamentarch from '@parliamentarch/svg';
@@ -27,4 +29,16 @@ const svgElement = parliamentarch.getSVGFromAttribution(attribution,
 const svgString = svgElement.outerHTML;
 ---
 
-<Fragment class="parliement" set:html={svgString}/>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+          <Head title="Test" />
+
+</head>
+<body>
+  
+  <div class="parl">
+    <Fragment class="parliement" set:html={svgString}/>
+  </div>
+</body>
+</html>

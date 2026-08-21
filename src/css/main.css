@@ -628,6 +628,10 @@ svg#map .cls-6 {
     height: 90px;
   }
 }
+.parl g {
+  stroke: green;
+}
+
 /* Tufte CSS styles */
 html {
   font-size: 15px;
