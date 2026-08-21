@@ -1,0 +1,50 @@
+---
+interface Props {
+  region: string;
+  title: string;
+  code: string;
+}
+const { region, title, code } = Astro.props;
+
+const normalizedTitle = title
+  .normalize("NFD")
+  .replace(/[\u0300-\u036f]/g, "")
+  .toUpperCase();
+---
+<div class="articleCard">
+                <div class="leftInfo">
+                    <p>{region}</p>
+                </div>
+                <div class="titleWrapper">
+                    <div class="titleInfo">
+                        <svg
+                            class="line0"
+                            width="100%"
+                            height="100%"
+                            viewBox="0 0 400 200"
+                            preserveAspectRatio="none"
+                        >
+                            <text
+                                x="0"
+                                y="0"
+                                font-size="400"
+                                font-weight="900"
+                                font-family="DrukBis"
+                            >
+                                {
+                                    normalizedTitle
+                                }
+                            </text>
+                        </svg>
+                    </div>
+                </div>
+                <slot name="right">
+                    <div class="flagInfo">
+                        <img
+                            src=`https://flagcdn.com/w2560/${code.toLowerCase()}.png`
+                            alt=`${code}`
+                        />
+                    </div>
+                </slot>
+                
+            </div>

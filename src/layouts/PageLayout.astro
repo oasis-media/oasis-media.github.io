@@ -3,135 +3,39 @@ import MenuLayout from "../layouts/MenuLayout.astro";
 import Head from "../layouts/Head.astro";
 import Top from "../layouts/Top.astro";
 const { title, date, author, type } = Astro.props.frontmatter;
-import { Image } from 'astro:assets';
+import { Image } from "astro:assets";
 
-import index from '.././assets/img/index.png';
+import index from ".././assets/img/index.png";
+import ArticleCard from "../components/articleCard.astro";
 ---
+
 <html lang="fr">
-  <head>
-    <Head title={title}></Head>
-  </head>
-  <body>
-    <MenuLayout></MenuLayout>
-            <Top/>
-            <div class="contentWrapper">
-            <div id="cardTitle" class=" articleCard">
-                                <div class="leftInfo">
-                                    <p>{type}</p>
-                                </div>
-                                <div class="titleWrapper">
-                                    <div class="titleInfo">
-                                        <svg
-                                            class="line0"
-                                            width="100%"
-                                            height="100%"
-                                            viewBox="0 0 400 200"
-                                            preserveAspectRatio="none"
-                                        >
-                                            <text
-                                                x="0"
-                                                y="0"
-                                                font-size="400"
-                                                font-weight="900"
-                                                font-family="DrukBis"
-                                            >
-                                                {title}
-                                            </text>
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div class="authorInfo">
-                                    <p>{author}</p>
-                                </div>
-                            </div>
-        
-        <div class="page">
-            <article>
-                <slot/>
-        <div class="bigAssMargin"></div>
+    <head>
+        <Head title={title} />
+    </head>
+    <body>
+        <MenuLayout />
+        <Top />
+        <div class="contentWrapper">
+            <ArticleCard code="Null" region={type} title={title}>
+                <div class="authorInfo" slot="right">
+                    <p>{author}</p>
+                </div>
+            </ArticleCard>
 
-                <section class="endnoteWrap"></section>
-            </article>
-        </div>
-        <div class="bigAssMargin"></div>
-      
+            <div class="page">
+                <article>
+                    <slot />
+
+                    <section class="endnoteWrap"></section>
+                </article>
+            </div>
         </div>
 
         <script>
-            var colors = [
-                ["#BC1919", "#FFF5F4"],
-                ["#FFF5F4", "#BC1919"],
-                ["black", "#FFF5F4"],
-                ["#FFF5F4", "black"],
-                ["black", "#BC1919"],
-            ];
-            const svgs = [...document.querySelectorAll<SVGSVGElement>(".titleInfo .line0")];
-const value = getComputedStyle(document.documentElement).getPropertyValue('--title-font');
-const text = document.querySelector<SVGTextElement>(".titleInfo text");
-if (text) {
-    text.style.fontFamily = value;
-}
-            document.fonts.ready.then(() => {
-                var num = Math.floor(Math.random() * (5));
-                svgs.forEach((svg) => {
-                    if (!svg) return;
-                    const text = svg.querySelector("text");
-                    if (!text) return;
-                    const par = svg.parentElement?.parentElement?.parentElement;
-                    if (!par) return;
-
-                    (par as HTMLElement).style.backgroundColor = colors[num][1];
-                    const parPs = [...par.querySelectorAll("p")];
-                    parPs.forEach((parP) => {
-                        (parP as HTMLElement).style.color = colors[num][0];
-                    });
-                    const pct = Math.floor(Math.random() * 16) + 70;
-                    if (svg.parentElement) {
-                        (svg.parentElement as HTMLElement).style.width = pct + "%";
-                    }
-
-                    svg.style.fill = colors[num][0];
-                    const bbox = text.getBBox();
-                    if(value=="'Druk'"){
-                            svg.setAttribute(
-                            "viewBox",
-                            `0 0 ${bbox.width} ${bbox.height}`,
-                        );
-                        text.setAttribute("y", String(bbox.height - 35));
-
-                        } else {
-                            svg.setAttribute(
-                            "viewBox",
-                            `0 0 ${bbox.width} ${bbox.height - 100}`,
-                        );
-                        text.setAttribute("y", String(bbox.height - 145));
-
-                        }
-                    text.setAttribute("x", "0");
-                });
-            });
+            import { stretchText, endnote } from "../assets/js/color.js";
+            stretchText();
+            endnote();
         </script>
-        <script>
-            const sew = document.querySelector(".endnoteWrap");
-            const labels = [...document.querySelectorAll('label')]
-            labels.forEach((label, index)=> {
-                label.setAttribute('for', `sn-${index + 1}`)
-                if(!label.nextElementSibling) return 
-                label.nextElementSibling.id = "sn-" + (index + 1)
-                if(!label.nextElementSibling.nextElementSibling) return 
-                const content = label.nextElementSibling.nextElementSibling.innerHTML
-                if(!sew) return;
-                const sp = document.createElement('span')
-                sp.classList.add('endnote')
-                sp.innerHTML = content
-                sew.appendChild(sp)
-                sp.addEventListener('click', () => {
-                    label.scrollIntoView()
-                })
-
-            })
-        </script>
-
-        
-  </body>
+    </body>
 </html>

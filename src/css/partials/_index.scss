@@ -163,6 +163,15 @@ html {
     }
 }
 
+.menu-open-body {
+    background-color: #BC1919;
+    transition: 0.5s ease;
+
+    > *:not(.menu-wrap) {
+        visibility: hidden;
+    }
+}
+
 .close {
     height: 150px;
     width: 150px;

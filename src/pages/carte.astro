@@ -12,7 +12,6 @@ import json from ".././data/countries.json";
 
 <html lang="fr">
     <head>
-        /* Script pour détecter si c'est un mobile, et si c'est le cas rediriger vers /carte-mobile */
         <script is:inline>
             var isMobile =
                 window.matchMedia("(max-width: 768px)").matches ||
@@ -21,7 +20,7 @@ import json from ".././data/countries.json";
                 window.location.replace("/carte-mobile");
             }
         </script>
-        <Head title="Carte" />
+        <Head title="Carte" description="Découvrez notre carte interactive et explorez la vie politique de quelques pays !" />
     </head>
     <body style="overflow:hidden; height:100dvh; width:100vw;">
         <style>
@@ -43,7 +42,6 @@ import json from ".././data/countries.json";
         <MenuLayout />
         <Image src={star} id="star-centre" alt="" />
 
-        /* Carte en svg */
         <svg
             xmlns="http://www.w3.org/2000/svg"
             id="map"
@@ -1352,7 +1350,6 @@ import json from ".././data/countries.json";
             <p>cliquer sur un <span>pays</span> pour découvrir</p>
         </div>
 
-        /* Gestion du pan/zoom */
         <script src="https://unpkg.com/svg-pan-zoom/dist/svg-pan-zoom.min.js"></script>
         
         <script type="text/javascript" is:inline>

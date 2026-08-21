@@ -180,19 +180,16 @@
         const stars = [...document.querySelectorAll(".li div")];
         setTimeout(() => {
             mb.style.display = "block";
-            bod.style.backgroundColor = "#BC1919";
-            for (const child of bod.children) {
-                child.style.visibility = "hidden";
-            }
+            bod.classList.add("menu-open-body");
             mw.style.visibility = "";
             setTimeout(() => {
-                stars.forEach((star) => {
-                    const el = star.children[0].children[0];
-                    const info = el.getBoundingClientRect();
-                    const length = info.width;
-                    const top = info.height;
-                    star.children[1].style.left = length + "px";
-                    star.children[1].style.top = "-" + top / (4 / 3) + "px";
+                const infos = stars.map((star) =>
+                    star.children[0].children[0].getBoundingClientRect(),
+                );
+                stars.forEach((star, i) => {
+                    const { width, height } = infos[i];
+                    star.children[1].style.left = width + "px";
+                    star.children[1].style.top = "-" + height / (4 / 3) + "px";
                 });
             }, 200);
         }, 200);
@@ -203,10 +200,7 @@
         c.classList.remove("opened");
         setTimeout(() => {
             mb.style.display = "none";
-            bod.style.backgroundColor = "";
-            for (const child of bod.children) {
-                child.style.visibility = "";
-            }
+            bod.classList.remove("menu-open-body");
         }, 100);
         setTimeout(() => {
             m.querySelector(".me").style.opacity = "1";
