@@ -607,13 +607,13 @@ svg#map .cls-6 {
   height: 50%;
   width: 100%;
 }
-.contentWrapper .authorInfo {
+.contentWrapper .articleCard .authorInfo {
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.contentWrapper .authorInfo p {
+.contentWrapper .articleCard .authorInfo p {
   font-family: "AlteRegular", sans-serif, monospace;
   color: var(--bg);
 }
