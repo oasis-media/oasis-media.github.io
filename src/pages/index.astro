@@ -1,6 +1,6 @@
 ---
-import MenuLayout from "../layouts/MenuLayout.astro";
-import Head from "../layouts/Head.astro";
+import MenuLayout from "../components/Menu.astro";
+import Head from "../components/Head.astro";
 import { Image } from "astro:assets";
 
 import index from ".././assets/img/indexlogo.png";
@@ -11,16 +11,16 @@ import index from ".././assets/img/indexlogo.png";
         <meta name="google-site-verification" content="PDGAgyfzCxghjn0UBkugehbjQcVvDnmBA48c7bnK3Mk" />
         <Head title="oasis-media" description="Bienvenue sur notre site ! Lisez ici des articles politiques, des résumés de livres et d'autres contenus !" />
     </head>
-    <body style=" height:100dvh;width:100vw; background-color: 000">
+    <body style=" height:100dvh;width:100vw;">
         <MenuLayout />
 
-        <div class="indexBg">
-            <div class="indexLogo">
-                <Image src={index} alt="" />
+        <div class="index-wrap">
+            <div class="index-logo">
+                <Image src={index} alt="oasis logo" />
             </div>
         </div>
         <a href="/browse">
-            <div class="indexSvg">
+            <div class="index-svg   ">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink"

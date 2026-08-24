@@ -1,0 +1,51 @@
+.index-wrap {
+    height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.index-logo {
+    width: 100vw;
+    pointer-events: none;
+
+    img {
+        width: 100%;
+        pointer-events: none;
+
+    }
+}
+
+.index-svg {
+    width: 30vw;
+    position: absolute;
+    bottom: 20px;
+    background-color: var(--background);
+    left: 50%;
+    transform: translateX(-50%);
+
+    svg {
+        width: 100%;
+        fill: white;
+    }
+}
+
+@media (min-aspect-ratio: 16/11) {
+    .index-logo {
+        width: 90vw;
+    }
+}
+
+@media (max-height: 550px) {
+    .index-logo {
+        width: 60vw;
+    }
+}
+
+@media (max-width: 768px) and (max-aspect-ratio: 11/11) {
+    .index-svg {
+        width: 70vw;
+        bottom: 70px;
+    }
+
+}

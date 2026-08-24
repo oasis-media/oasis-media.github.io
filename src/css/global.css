@@ -1,0 +1,100 @@
+@font-face {
+    font-family: Wahroonga;
+    src: url(/fonts/Wahroonga.ttf) format('truetype'),
+        url(/fonts/Wahroonga.ttf) format('woff2');
+}
+
+@font-face {
+    font-family: Druk;
+    src: url('/fonts/Druk.woff2') format('woff2'),
+        url('/fonts/Druk.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: DrukBis;
+    src: url('/fonts/DrukWideBold.woff') format('woff');
+}
+
+@font-face {
+    font-family: AlteRegular;
+    src: url(/fonts/AlteHaasGroteskRegular.ttf) format('truetype'),
+        url(/fonts/AlteHaasGroteskRegular.ttf) format('woff2');
+}
+
+@font-face {
+    font-family: Garamond;
+    src: url('/fonts/GARA.woff2') format('woff2'),
+        url('/fonts/GARA.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: Garamond;
+    src: url('/fonts/GARAIT.woff2') format('woff2'),
+        url('/fonts/GARAIT.ttf') format('truetype');
+    font-style: italic;
+}
+
+@font-face {
+    font-family: Garamond;
+    src: url('/fonts/GARABD.woff2') format('woff2'),
+        url('/fonts/GARABD.ttf') format('truetype');
+    font-weight: bold;
+}
+
+:root {
+    --title-font: 'Druk';
+}
+
+@media (max-width: 769px) {
+    :root {
+        --title-font: 'DrukBis';
+    }
+}
+
+img {
+    width: auto;
+    height: auto;
+}
+
+:root {
+    --accent: #BC1919;
+    --bg: #FFF5F4;
+    --background: #121212;
+}
+
+body {
+    min-height: 100dvh;
+}
+
+* {
+    margin: 0;
+    overscroll-behavior-x: none;
+    /* prevent horizontal overscroll */
+    overscroll-behavior-y: none;
+}
+
+*::selection {
+    background: var(--accent);
+    color: var(--bg);
+}
+
+*::-moz-selection {
+    background: var(--accent);
+    color: var(--bg);
+}
+
+*::-webkit-selection {
+    background: var(--accent);
+    color: var(--bg);
+}
+
+body {
+    background-color: var(--background);
+    overflow-x: hidden;
+}
+
+html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent) transparent;
+}
+

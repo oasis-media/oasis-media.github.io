@@ -11,7 +11,6 @@ export function stretchText() {
     const rawValue = getComputedStyle(
         document.documentElement,
     ).getPropertyValue("--title-font");
-    console.log(rawValue)
     const value = rawValue.replace(/^['"]|['"]$/g, "");
     const svgs = [
         ...document.querySelectorAll(".titleInfo .line0"),
@@ -44,16 +43,13 @@ export function stretchText() {
 
                 svg.style.fill = colors[tic][0];
                 const bbox = text.getBBox();
-                console.log(value)
                 if (value == "Druk") {
-                    console.log("druk");
                     svg.setAttribute(
                         "viewBox",
                         `0 0 ${bbox.width} ${bbox.height}`,
                     );
                     text.setAttribute("y", String(bbox.height - 35));
                 } else {
-                    console.log("not druk");
                     svg.setAttribute(
                         "viewBox",
                         `0 0 ${bbox.width} ${bbox.height - 100}`,

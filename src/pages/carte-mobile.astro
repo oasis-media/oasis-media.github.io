@@ -1,7 +1,7 @@
 ---
-import MenuLayout from "../layouts/MenuLayout.astro";
-import Head from "../layouts/Head.astro";
-import Top from "../layouts/Top.astro";
+import MenuLayout from "../components/Menu.astro";
+import Head from "../components/Head.astro";
+import Top from "../components/Top.astro";
 import countries from "../data/countries.json";
 
 interface Post {
@@ -56,7 +56,7 @@ import ArticleCard from '../components/articleCard.astro';
                 {
                     data.map((d) => (
                         <a href={d.url}>
-                            <ArticleCard region={d.region} title={d.title} code={d.code}/>
+                            <ArticleCard region={d.region} title={d.title} code={d.code} class=""/>
                         </a>
                     ))
                 }

@@ -1,7 +1,5 @@
 ---
 import { JSDOM } from 'jsdom';
-import Head from "../layouts/Head.astro";
-
 globalThis.document = new JSDOM().window.document;
 
 import * as parliamentarch from '@parliamentarch/svg';
@@ -29,16 +27,60 @@ const svgElement = parliamentarch.getSVGFromAttribution(attribution,
 const svgString = svgElement.outerHTML;
 ---
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-          <Head title="Test" />
+<div
+  id="map"
+></div>
 
-</head>
-<body>
-  
-  <div class="parl">
+<div class="parl">
     <Fragment class="parliement" set:html={svgString}/>
   </div>
-</body>
-</html>
+
+<style>
+  #map {
+    width: 100%;
+    height: 100vh;
+  }
+</style>
+
+<script>
+  import L from "leaflet";
+  import "leaflet/dist/leaflet.css";
+  async function init_map(){
+    const countries = await fetch("/geojson/country.geojson")
+      .then(response => response.json());
+  
+    const mapElement = document.querySelector("#map");
+    if (!(mapElement instanceof HTMLElement)) return;
+
+    const map = L.map(mapElement, {
+      worldCopyJump: false,
+      minZoom: 2,
+      zoomControl: false,
+      maxBounds: L.latLngBounds([-90, -180], [90, 180]),
+      attributionControl: false
+    });
+  
+    map.setView([20, 0], 2);
+  
+    const countryLayer = L.geoJSON(countries, {
+  style: {
+    fillColor: "#d9d5c7",
+    fillOpacity: 1,
+    color: "#252525",
+    weight: 1,
+    opacity: 1
+  }
+}).addTo(map);
+
+
+  
+    map.on("zoomend", () => {
+      const zoom = map.getZoom();
+      console.log("Zoom level:", zoom);
+    });
+  }
+
+  init_map();
+</script>
+
+

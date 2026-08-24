@@ -197,7 +197,11 @@ svg#map {
 }
 
 .parlement {
-    cursor: grab
+    cursor: grab;
+
+    text {
+        fill: var(--bg);
+    }
 }
 
 .page .bandeauPol {

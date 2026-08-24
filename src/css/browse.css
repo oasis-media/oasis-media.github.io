@@ -1,0 +1,133 @@
+.topLogo {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 150px;
+    margin-top: 24px;
+    margin-bottom: 24px;
+
+    a {
+        height: 100%;
+    }
+
+    img {
+        height: 100%;
+    }
+}
+
+
+
+.browseWrap {
+    margin-top: 24px;
+
+    a {
+        text-decoration: none;
+    }
+}
+
+.articleCard {
+    height: 180px;
+    display: grid;
+    grid-template-columns: 50px 1fr 200px;
+    position: relative;
+    background: var(--accent);
+
+    .leftInfo {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        p {
+            transform: rotate(-90deg);
+            font-family: 'AlteRegular', sans-serif, monospace;
+            color: var(--bg);
+
+        }
+    }
+
+    .titleWrapper {
+        height: 100%;
+
+        .titleInfo {
+            width: 80%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            transition: 0.3s ease;
+            transform-origin: left;
+
+            svg {
+                display: block;
+                fill: var(--bg);
+                height: 180px;
+            }
+
+            .line1,
+            .line2 {
+                height: 50%;
+                width: 100%;
+            }
+        }
+    }
+
+
+    .authorInfo {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        p {
+            font-family: 'AlteRegular', sans-serif, monospace;
+            color: var(--bg);
+        }
+    }
+
+    .flagInfo {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: right;
+
+        img {
+            height: 180px;
+        }
+    }
+
+
+}
+
+
+
+.articleCard:hover {
+    .titleWrapper .titleInfo:not(.pageTitle) {
+        transform: scaleX(1.2);
+}
+}
+    
+
+@media (max-width: 550px) {
+    .topLogo {
+        height: 80px;
+        margin-top: 30px;
+
+    }
+
+
+    .browseWrap .articleCard {
+        height: 90px;
+        grid-template-columns: 30px 1fr 60px;
+        font-size: 10px;
+
+        .flagInfo img {
+            height: 90px;
+        }
+
+        .titleWrapper .titleInfo svg {
+            height: 90px;
+        }
+    }
+}

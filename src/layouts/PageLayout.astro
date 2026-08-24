@@ -1,12 +1,14 @@
 ---
-import MenuLayout from "../layouts/MenuLayout.astro";
-import Head from "../layouts/Head.astro";
-import Top from "../layouts/Top.astro";
-const { title, date, author, type } = Astro.props.frontmatter;
+import MenuLayout from "../components/Menu.astro";
+import Head from "../components/Head.astro";
+import Top from "../components/Top.astro";
+const { title, date, author, type, L, U } = Astro.props.frontmatter;
 import { Image } from "astro:assets";
 
-import index from ".././assets/img/index.png";
+
 import ArticleCard from "../components/articleCard.astro";
+
+
 ---
 
 <html lang="fr">
@@ -17,7 +19,12 @@ import ArticleCard from "../components/articleCard.astro";
         <MenuLayout />
         <Top />
         <div class="contentWrapper">
-            <ArticleCard code="Null" region={type} title={title}>
+            <ArticleCard
+                code="Null"
+                region={type}
+                title={title}
+                class="pageTitle"
+            >
                 <div class="authorInfo" slot="right">
                     <p>{author}</p>
                 </div>
@@ -31,7 +38,6 @@ import ArticleCard from "../components/articleCard.astro";
                 </article>
             </div>
         </div>
-
         <script>
             import { stretchText, endnote } from "../assets/js/color.js";
             stretchText();

@@ -1,7 +1,7 @@
 ---
-import MenuLayout from "../layouts/MenuLayout.astro";
-import Head from "../layouts/Head.astro";
-import Top from "../layouts/Top.astro";
+import MenuLayout from "../components/Menu.astro";
+import Head from "../components/Head.astro";
+import Top from "../components/Top.astro";
 
 interface Post {
     url: string;
@@ -24,21 +24,19 @@ import ArticleCard from '../components/articleCard.astro';
     </head>
     <body>
         <MenuLayout />
-        <div class="contentWrapper">
-            <Top/>
-            <div class="browseWrap">
-                {
-                    posts.map((post) => (
-                        <a href={post.url}>
-                            <ArticleCard code=Null region={post.frontmatter.type} title={post.frontmatter.title}>
-                                <div class="authorInfo" slot="right">
-                                    <p>{post.frontmatter.author}</p>
-                                </div>
-                            </ArticleCard>
-                        </a>
-                    ))
-                }
-            </div>
+        <Top/>
+        <div class="browseWrap">
+            {
+                posts.map((post) => (
+                    <a href={post.url}>
+                        <ArticleCard code=Null region={post.frontmatter.type} title={post.frontmatter.title} class="">
+                            <div class="authorInfo" slot="right">
+                                <p>{post.frontmatter.author}</p>
+                            </div>
+                        </ArticleCard>
+                    </a>
+                ))
+            }
         </div>
 
         
