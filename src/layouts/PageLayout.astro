@@ -3,12 +3,10 @@ import MenuLayout from "../components/Menu.astro";
 import Head from "../components/Head.astro";
 import Top from "../components/Top.astro";
 const { title, date, author, type, L, U } = Astro.props.frontmatter;
+const { headings } = Astro.props;
 import { Image } from "astro:assets";
 
-
 import ArticleCard from "../components/articleCard.astro";
-
-
 ---
 
 <html lang="fr">
@@ -30,6 +28,32 @@ import ArticleCard from "../components/articleCard.astro";
                 </div>
             </ArticleCard>
 
+            
+        {
+            headings && headings.length > 0 ? (
+                <aside class="pageSummary" aria-label="Résumé de la page">
+                    <p class="pageSummaryTitle">Sommaire</p>
+                    <nav>
+                        <ol>
+                            {headings.map(
+                                (heading: {
+                                    depth: any;
+                                    slug: any;
+                                    text: unknown;
+                                }) => (
+                                    <li class={`summaryLevel${heading.depth}`}>
+                                        <a href={`#${heading.slug}`}>
+                                            {heading.text}
+                                        </a>
+                                    </li>
+                                ),
+                            )}
+                        </ol>
+                    </nav>
+                </aside>
+            ) : null
+        }
+        
             <div class="page">
                 <article>
                     <slot />
@@ -43,5 +67,84 @@ import ArticleCard from "../components/articleCard.astro";
             stretchText();
             endnote();
         </script>
+        <script>
+const links = [...document.querySelectorAll('.pageSummary a')];
+
+const headings = links
+    .map(link => {
+        const id = link.getAttribute('href')?.slice(1);
+        return id ? document.getElementById(id) : null;
+    })
+    .filter((heading): heading is HTMLElement => heading !== null);
+
+let activeHeading: HTMLElement | null = null;
+
+function updateActiveHeading() {
+    // Point at which a heading becomes "current"
+    const threshold = window.innerHeight * 0.25;
+
+    let current = null;
+
+    for (const heading of headings) {
+        const rect = heading.getBoundingClientRect();
+
+        if (rect.top <= threshold) {
+            current = heading;
+        } else {
+            break;
+        }
+    }
+
+    // Before reaching the first heading
+    if (!current) {
+        current = headings[0];
+    }
+
+    if (current === activeHeading) return;
+
+    activeHeading = current;
+
+    // Remove previous state
+    document
+        .querySelectorAll('.pageSummary li[data-parent-active]')
+        .forEach(li => li.removeAttribute('data-parent-active'));
+
+    document
+        .querySelectorAll('.pageSummary a[data-active]')
+        .forEach(a => a.removeAttribute('data-active'));
+
+    // Activate current item
+    const link = document.querySelector(
+        `.pageSummary a[href="#${CSS.escape(current.id)}"]`
+    );
+
+    if (link) {
+        link.setAttribute('data-active', 'true');
+
+        var link_class = link.parentElement?.classList?.[0];
+        var num = parseInt(link_class?.slice(-1) ?? "0", 10);
+        link.parentElement?.setAttribute('data-parent-active', 'true');
+        while (num > 2) {
+            num--;
+            let el = link.parentElement?.previousElementSibling;
+            el?.setAttribute('data-parent-active', 'true')
+            while (el && !el.classList.contains(`summaryLevel${num}`)) {
+                el = el.previousElementSibling;
+                el?.setAttribute('data-parent-active', 'true');
+        
+            }
+
+        }
+    }
+}
+
+window.addEventListener('scroll', updateActiveHeading, {
+    passive: true
+});
+
+window.addEventListener('resize', updateActiveHeading);
+
+updateActiveHeading();
+            </script>
     </body>
 </html>

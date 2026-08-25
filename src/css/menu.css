@@ -102,7 +102,7 @@
     top: 20px;
 }
 
-nav {
+.menu-wrap nav {
     display: none;
     position: fixed;
     top: 0;
@@ -165,7 +165,7 @@ nav {
 }
 
 @media (max-width: 769px) {
-    nav ul {
+    .menu-wrap nav ul {
         gap: 25px;
         li {
             letter-spacing: -1px;
@@ -186,7 +186,7 @@ nav {
         width: 80px;
     }
 
-    nav {
+    .menu-wrap nav {
         align-items: center;
         padding-top: 80px;
         ul {

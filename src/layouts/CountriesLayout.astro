@@ -7,6 +7,7 @@ import { Image } from "astro:assets";
 import index from ".././assets/img/index.png";
 import { JSDOM } from "jsdom";
 globalThis.document = new JSDOM().window.document;
+const { headings } = Astro.props;
 
 import * as parliamentarch from "@parliamentarch/svg";
 
@@ -33,12 +34,11 @@ if (!country) {
     throw new Error(`Country not found for code: ${code}`);
 }
 
-import ArticleCard from '../components/articleCard.astro';
-
+import ArticleCard from "../components/articleCard.astro";
 
 const results = {
-    "L": "",
-    "U": ""
+    L: "",
+    U: "",
 };
 Object.entries({ U, L } as const).forEach(([key, arr]) => {
     if (arr) {
@@ -50,7 +50,6 @@ Object.entries({ U, L } as const).forEach(([key, arr]) => {
         results[key as keyof typeof results] = svgString;
     }
 });
-
 ---
 
 <html lang="fr">
@@ -63,9 +62,38 @@ Object.entries({ U, L } as const).forEach(([key, arr]) => {
         <Top />
 
         <div class="contentWrapper">
-            <ArticleCard region={country.region} title={country.translations.fr} code={code} class="pageTitle"/>
+            <ArticleCard
+                region={country.region}
+                title={country.translations.fr}
+                code={code}
+                class="pageTitle"
+            />
         </div>
 
+        {
+            headings && headings.length > 0 ? (
+                <aside class="pageSummary" aria-label="Résumé de la page">
+                    <p class="pageSummaryTitle">Sommaire</p>
+                    <nav>
+                        <ol>
+                            {headings.map(
+                                (heading: {
+                                    depth: any;
+                                    slug: any;
+                                    text: unknown;
+                                }) => (
+                                    <li class={`summaryLevel${heading.depth}`}>
+                                        <a href={`#${heading.slug}`}>
+                                            {heading.text}
+                                        </a>
+                                    </li>
+                                ),
+                            )}
+                        </ol>
+                    </nav>
+                </aside>
+            ) : null
+        }
 
         <div class="page">
             <article>
@@ -73,16 +101,16 @@ Object.entries({ U, L } as const).forEach(([key, arr]) => {
                 <section class="endnoteWrap"></section>
             </article>
         </div>
-                <script>
-                        import { stretchText, endnote } from '../assets/js/color.js';
-                        stretchText();
-                        endnote();
-                    </script>
+        <script>
+            import { stretchText, endnote } from "../assets/js/color.js";
+            stretchText();
+            endnote();
+        </script>
 
-        <script is:inline define:vars={{ results, U, L, code }}>  
+        <script is:inline define:vars={{ results, U, L, code }}>
             const target_U = document.querySelector(`#${code}-U`); // ou document.querySelector('figure')
             const target_L = document.querySelector(`#${code}-L`); // ou document.querySelector('figure')
-            const dict = { "target_U": target_U, "target_L": target_L };
+            const dict = { target_U: target_U, target_L: target_L };
             Object.entries(results).forEach(([key, arr]) => {
                 if (arr) {
                     var target = "target_" + key;
@@ -90,12 +118,15 @@ Object.entries({ U, L } as const).forEach(([key, arr]) => {
                         dict[target].insertAdjacentHTML("beforeend", arr);
                         const text = dict[target].querySelector("text");
 
-                        dict[target].querySelector("svg").classList.add("parlement");
+                        dict[target]
+                            .querySelector("svg")
+                            .classList.add("parlement");
                         text.style.font = "2.2rem 'Wahroonga'";
                         text.style.transform = "scaleY(1.7) translateY(-3px)";
                         text.style["transform-origin"] = "center";
                         text.style["transform-box"] = "fill-box";
-                        dict[target].querySelector("svg").style["overflow"] = "visible";
+                        dict[target].querySelector("svg").style["overflow"] =
+                            "visible";
                     }
                 }
             });

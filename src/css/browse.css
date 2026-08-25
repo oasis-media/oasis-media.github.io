@@ -28,6 +28,7 @@
 
 .articleCard {
     height: 180px;
+    grid-column: 1 / -1;
     display: grid;
     grid-template-columns: 50px 1fr 200px;
     position: relative;
