@@ -37,11 +37,11 @@ Hey
 </section>
 <section>
 
-<figure id="FR-U" >
+<figure id="IT-U" >
     <span class="marginnote"> <strong style="font-family: 'Wahroonga'; font-size: 1.8rem;">Sénat</strong><hr></span>
 </figure>
 <hr>
-<figure id="FR-L" >
+<figure id="IT-L" >
     <span class="marginnote"> <strong style="font-family: 'Wahroonga'; font-size: 1.8rem;">Assemblée nationale</strong><hr></span>
 </figure>
 
