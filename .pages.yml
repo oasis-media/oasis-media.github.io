@@ -1,0 +1,58 @@
+media:
+  input: public
+  output: /
+
+components:
+  parties:
+    type: object
+    list: true
+    fields:
+      - name: id
+        label: Group
+        type: string
+        required: true
+      - name: seats
+        type: number
+        required: true
+      - name: data
+        label: Status
+        type: select
+        options:
+          values: ["n/a", "gouv", "opp"]
+        default: "n/a"
+      - name: color
+        type: string
+        pattern: "^#[0-9a-fA-F]{6}$"
+
+content:
+  - name: countries
+    label: Countries
+    type: collection
+    path: src/pages/countries
+    filename: "{fields.code}.md"
+    fields:
+      - name: layout
+        type: string
+        hidden: true
+        default: "../../layouts/CountriesLayout.astro"
+      - name: country
+        type: string
+        required: true
+      - name: code
+        label: ISO alpha-2 code
+        type: string
+        required: true
+      - name: date
+        type: string
+      - name: auteur
+        type: string
+      - name: U
+        label: Sénat (upper house)
+        component: parties
+      - name: L
+        label: Assemblée nationale (lower house)
+        component: parties
+      - name: body
+        type: code
+        options:
+          language: markdown
