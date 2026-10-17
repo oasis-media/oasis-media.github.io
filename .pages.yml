@@ -28,7 +28,7 @@ content:
   - name: carte
     label: Carte
     type: collection
-    path: src/pages/countries
+    path: src/pages/carte
     filename: "{fields.code}.md"
     fields:
       - name: layout
