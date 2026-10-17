@@ -3,6 +3,7 @@ import MenuLayout from "../components/Menu.astro";
 import Head from "../components/Head.astro";
 import Top from "../components/Top.astro";
 import { Image } from "astro:assets";
+import { buildCountrySections } from "../assets/js/countrySections";
 
 import index from ".././assets/img/index.png";
 import { JSDOM } from "jsdom";
@@ -11,11 +12,11 @@ const { headings } = Astro.props;
 
 import * as parliamentarch from "@parliamentarch/svg";
 
-const { code, U: rawU, L: rawL } = Astro.props.frontmatter;
+const { code, U: rawU, L: rawL, U_name, L_name } = Astro.props.frontmatter;
 
 // CMS stores { id, data, color, seats } → parliamentarch wants [{ id, data, color }, seats]
 const toAttribution = (arr?: ({ seats: number } & Record<string, unknown>)[]) =>
-    arr?.map(({ seats, ...party }) => [party, seats] as const);
+    arr?.map(({ seats,banner, ...party }) => [party, seats] as const);
 const U = toAttribution(rawU);
 const L = toAttribution(rawL);
 
@@ -39,12 +40,24 @@ if (!country) {
     throw new Error(`Country not found for code: ${code}`);
 }
 
+
+const sectionsHtml = buildCountrySections({
+    code,
+    U: rawU,
+    L: rawL,
+    nameU: U_name,
+    nameL: L_name,
+    imageDirs: [code, code.toLowerCase(), country.translations.fr],
+});
+
 import ArticleCard from "../components/articleCard.astro";
 
 const results = {
     L: "",
     U: "",
 };
+
+
 Object.entries({ U, L } as const).forEach(([key, arr]) => {
     if (arr) {
         const attribution = new Map(
@@ -103,6 +116,7 @@ Object.entries({ U, L } as const).forEach(([key, arr]) => {
         <div class="page">
             <article>
                 <slot />
+                <Fragment set:html={sectionsHtml} />
                 <section class="endnoteWrap"></section>
             </article>
         </div>
@@ -113,6 +127,11 @@ Object.entries({ U, L } as const).forEach(([key, arr]) => {
         </script>
 
         <script is:inline define:vars={{ results, U, L, code }}>
+            const position = document.querySelector(".endnoteWrap");
+            
+            
+
+
             const target_U = document.querySelector(`#${code}-U`); // ou document.querySelector('figure')
             const target_L = document.querySelector(`#${code}-L`); // ou document.querySelector('figure')
             const dict = { target_U: target_U, target_L: target_L };
