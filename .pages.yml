@@ -56,6 +56,12 @@ content:
       - name: L_name
         label: Lower house name
         type: string
+      - name: U
+        label: Upper house (parties)
+        component: parties
+      - name: L
+        label: Lower house (parties)
+        component: parties
       - name: body
         type: code
         options:
