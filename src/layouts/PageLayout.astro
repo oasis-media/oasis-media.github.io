@@ -7,6 +7,8 @@ const { headings } = Astro.props;
 import { Image } from "astro:assets";
 
 import ArticleCard from "../components/articleCard.astro";
+
+
 ---
 
 <html lang="fr">
@@ -28,7 +30,6 @@ import ArticleCard from "../components/articleCard.astro";
                 </div>
             </ArticleCard>
 
-            
         {
             headings && headings.length > 0 ? (
                 <aside class="pageSummary" aria-label="Résumé de la page">

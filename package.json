@@ -20,7 +20,8 @@
     "@parliamentarch/svg": "^5.1.1",
     "astro": "^7.0.7",
     "jsdom": "^29.1.1",
-    "leaflet": "^1.9.4"
+    "leaflet": "^1.9.4",
+    "rss-parser": "^3.13.0"
   },
   "devDependencies": {
     "@types/jsdom": "^28.0.3",

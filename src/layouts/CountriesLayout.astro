@@ -11,8 +11,13 @@ const { headings } = Astro.props;
 
 import * as parliamentarch from "@parliamentarch/svg";
 
-const { code, U, L } = Astro.props.frontmatter;
-const lowerCode = code.toLowerCase();
+const { code, U: rawU, L: rawL } = Astro.props.frontmatter;
+
+// CMS stores { id, data, color, seats } → parliamentarch wants [{ id, data, color }, seats]
+const toAttribution = (arr?: ({ seats: number } & Record<string, unknown>)[]) =>
+    arr?.map(({ seats, ...party }) => [party, seats] as const);
+const U = toAttribution(rawU);
+const L = toAttribution(rawL);
 
 interface Country {
     alpha2Code: string;

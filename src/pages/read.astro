@@ -1,0 +1,69 @@
+---
+import MenuLayout from "../components/Menu.astro";
+import Head from "../components/Head.astro";
+
+import Parser from 'rss-parser';
+
+const ID = '200287628-c-lian-chauveau';
+
+const parser = new Parser({
+  headers: { 'User-Agent': 'Mozilla/5.0 (oasis build)' }, // Goodreads can reject default agents
+  customFields: {
+    item: ['book_id', 'author_name', 'book_large_image_url', 'book_image_url', 'user_shelves'],
+  },
+});
+
+async function shelf(name: string) {
+  try {
+    const feed = await parser.parseURL(
+      `https://www.goodreads.com/review/list_rss/${ID}?shelf=${name}`
+    );
+    return feed.items.map((i: any) => ({
+      title: (i.title ?? '').trim(),
+      author: i.author_name,
+      href: `https://www.goodreads.com/book/show/${i.book_id}`,
+      cover: [i.book_large_image_url, i.book_image_url].find((u) => u && !u.includes('nophoto')),
+    }));
+  } catch {
+    return []; // a broken feed shouldn't break the build
+  }
+}
+
+const reading = await shelf('currently-reading');
+const marxism = await shelf('marxism');
+const queue = (await shelf('to-read')).slice(0, 8);
+---
+
+<html lang="fr">
+    <head>
+        <Head title="404 - Page non trouvée" description="La page que vous recherchez n'existe pas." />
+    </head>
+    <body style=" height:100dvh;width:100vw; background-color: 000">
+        <MenuLayout />
+
+        <div class="page">
+
+        {reading.length > 0 && (
+  <section class="shelf">
+    <h2>Reading now</h2>
+    <ul>{reading.map((b) => <li><a href={b.href}>
+      {b.cover ? <img src={b.cover} alt="" loading="lazy" /> : <div class="blank">{b.title}</div>}
+      <span class="t">{b.title}</span><span class="a">{b.author}</span>
+    </a></li>)}</ul>
+  </section>
+)}
+        <section class="shelf">
+          <h2>Next up</h2>
+          <ul>{marxism.map((b) => <li><a href={b.href}>
+            {b.cover ? <img src={b.cover} alt="" loading="lazy" /> : <div class="blank">{b.title}</div>}
+            <span class="t">{b.title}</span><span class="a">{b.author}</span>
+          </a></li>)}</ul>
+        </section>
+        </div>
+
+
+
+
+
+    </body>
+</html>
