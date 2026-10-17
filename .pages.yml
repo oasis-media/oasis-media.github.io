@@ -25,10 +25,10 @@ components:
         pattern: "^#[0-9a-fA-F]{6}$"
 
 content:
-  - name: countries
-    label: Countries
+  - name: carte
+    label: Carte
     type: collection
-    path: src/pages/countries
+    path: src/pages/carte
     filename: "{fields.code}.md"
     fields:
       - name: layout
