@@ -9,6 +9,10 @@ U:
     seats: 21
     data: gouv
     color: "#DD0000"
+  - id: apple
+    seats: 12
+    data: n/a
+    color: "#000000"
 L:
   - id: GDR
     seats: 120
