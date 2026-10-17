@@ -13,4 +13,21 @@ U:
     color: "#DC1919"
     banner:
       - donkey
+      - blue
+  - id: Repu
+    seats: 110
+    data: n/a
+    color: "#FFF5F4"
+    banner:
+      - GOP
+L:
+  - id: Demo
+    seats: 12
+    data: n/a
+    color: "#fff5f4"
+  - id: Repu
+    seats: 12
+    data: n/a
+    color: "#DC1919"
 ---
+Hey
