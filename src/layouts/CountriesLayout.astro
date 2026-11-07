@@ -50,6 +50,18 @@ const sectionsHtml = buildCountrySections({
     imageDirs: [code, code.toLowerCase(), country.translations.fr],
 });
 
+type Heading = { depth: number; slug: string; text: string };
+
+const extraHeadings: Heading[] = [
+    ...(U?.length ? [{ depth: 2, slug: `${code}-U`, text: U_name ?? "Chambre haute" }] : []),
+    ...(L?.length ? [{ depth: 2, slug: `${code}-L`, text: L_name ?? "Chambre basse" }] : []),
+    ...(sectionsHtml.includes("bandeauPol")
+        ? [{ depth: 2, slug: "partis", text: "Partis politiques" }]
+        : []),
+];
+
+const summary: Heading[] = [...(headings ?? []), ...extraHeadings];
+
 import ArticleCard from "../components/articleCard.astro";
 
 const results = {
@@ -86,15 +98,17 @@ Object.entries({ U, L } as const).forEach(([key, arr]) => {
                 code={code}
                 class="pageTitle"
             />
-        </div>
+        
 
-        {
-            headings && headings.length > 0 ? (
+                
                 <aside class="pageSummary" aria-label="Résumé de la page">
                     <p class="pageSummaryTitle">Sommaire</p>
                     <nav>
                         <ol>
-                            {headings.map(
+                            <li><a href="#top" class="summaryTop" aria-label="Haut de page">(Haut de la page)</a></li>
+        {
+            summary.length > 0 ? (
+                            summary.map(
                                 (heading: {
                                     depth: any;
                                     slug: any;
@@ -106,12 +120,12 @@ Object.entries({ U, L } as const).forEach(([key, arr]) => {
                                         </a>
                                     </li>
                                 ),
-                            )}
+                            )
+                        ) : null
+                    }
                         </ol>
                     </nav>
                 </aside>
-            ) : null
-        }
 
         <div class="page">
             <article>
@@ -120,8 +134,24 @@ Object.entries({ U, L } as const).forEach(([key, arr]) => {
                 <section class="endnoteWrap"></section>
             </article>
         </div>
+        </div>
         <script>
             import { stretchText, endnote } from "../assets/js/color.js";
+
+            document.querySelectorAll<HTMLElement>("figure figcaption").forEach((caption) => {
+            const resizeObserver = new ResizeObserver(() => {
+                const { width, height } = caption.getBoundingClientRect();
+
+                // Circle centered at the bottom-left must reach
+                // the caption's farthest corner.
+                const diameter = 2 * Math.hypot(width, height);
+
+                caption.style.setProperty("--circle-size", `${diameter}px`);
+            });
+
+            resizeObserver.observe(caption);
+            });
+
             stretchText();
             endnote();
         </script>

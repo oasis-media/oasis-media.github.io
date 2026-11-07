@@ -1,69 +1,339 @@
 ---
+import { cached } from "../lib/cache";
 import MenuLayout from "../components/Menu.astro";
 import Head from "../components/Head.astro";
+import ArticleCard from "../components/articleCard.astro";
+import Top from "../components/Top.astro";
 
-import Parser from 'rss-parser';
+import Parser from "rss-parser";
 
-const ID = '200287628-c-lian-chauveau';
+function firstParagraph(html = "") {
+  console.log("ARIGATO", html.slice(html.indexOf("<p>") + 3).slice(0,2000))
+  const text = html.slice(html.indexOf("<p>") + 3)
+    .replace(/<[^>]+>/g, "") // strip inner tags
+    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
+    .replace(/&nbsp;/g, " ")
+    .replace(/&quot;/g, '"')
+    .replace(/&amp;/g, "&")
+    .trim();
+  if (text) return text.slice(0, 600); // skip empty <p></p>
+  
+  return "";
+}
+
+const ID = "200287628-c-lian-chauveau";
 
 const parser = new Parser({
-  headers: { 'User-Agent': 'Mozilla/5.0 (oasis build)' }, // Goodreads can reject default agents
+  headers: { "User-Agent": "Mozilla/5.0 (oasis build)" }, // Goodreads can reject default agents
   customFields: {
-    item: ['book_id', 'author_name', 'book_large_image_url', 'book_image_url', 'user_shelves'],
+    item: [
+      "book_id",
+      "author_name",
+      "book_large_image_url",
+      "book_image_url",
+      "user_shelves",
+    ],
   },
 });
 
 async function shelf(name: string) {
   try {
-    const feed = await parser.parseURL(
-      `https://www.goodreads.com/review/list_rss/${ID}?shelf=${name}`
-    );
+    const feed = await cached(`rss:${name}`, () => parser.parseURL(
+      `https://www.goodreads.com/review/list_rss/${ID}?shelf=${name}`,
+    ));
+
     return feed.items.map((i: any) => ({
-      title: (i.title ?? '').trim(),
+      title: (i.title ?? "").trim(),
       author: i.author_name,
       href: `https://www.goodreads.com/book/show/${i.book_id}`,
-      cover: [i.book_large_image_url, i.book_image_url].find((u) => u && !u.includes('nophoto')),
+      cover: [i.book_large_image_url, i.book_image_url].find(
+        (u) => u && !u.includes("nophoto"),
+      ),
     }));
   } catch {
     return []; // a broken feed shouldn't break the build
   }
 }
 
-const reading = await shelf('currently-reading');
-const marxism = await shelf('marxism');
-const queue = (await shelf('to-read')).slice(0, 8);
+
+const FEED_URL = "https://ln.ht/_/feed/~oasis";
+const lnparser = new Parser({
+  headers: {
+    "User-Agent": "Mozilla/5.0 (oasis build)",
+    Accept: "*/*",
+  },
+});
+async function getBookmarks() {
+  try {
+    const feed = await cached(`rss:${FEED_URL}`, () =>
+      lnparser.parseURL(FEED_URL),
+    );
+
+    return feed.items.map((i: any) => ({
+      title: (i.title ?? "").trim(),
+      href: i.link ?? i.guid ?? "",
+      tags: i.categories ?? [],
+      description: (i.contentSnippet ?? "").trim(),
+      date: i.isoDate ?? i.pubDate ?? "",
+    }));
+  } catch (error) {
+    console.error("Could not fetch Linkhut feed:", error);
+    return [];
+  }
+}
+
+
+
+
+const subparser = new Parser({
+  headers: {
+    "User-Agent": "Mozilla/5.0 (oasis build)",
+    Accept: "*/*",
+  },
+  customFields: {
+    item: [["description", "subtitle"]], // Substack's short subtitle
+  },
+});
+
+const SUBSTACKS = ["pokepreet", "redf0undation", "thestalinera", "organicintellectual", "felikssoselo", "prometheanmarx"];
+
+const FEED_URLS = [
+  ...SUBSTACKS.map((name) => `https://${name}.substack.com/feed`)
+];
+
+async function getMixedFeed() {
+  const results = await Promise.all(
+    FEED_URLS.map(async (url) => {
+      try {
+        const feed = await cached(`rss:${url}`, () => subparser.parseURL(url));
+        return feed.items.map((i: any) => ({
+          source: (feed.title ?? new URL(url).hostname).trim(),
+          title: (i.title ?? "").trim(),
+          href: (i.link ?? i.guid ?? "").trim(),
+          description: (
+            i.subtitle ??
+            (i.contentSnippet ?? "").slice(0, 200)
+          ).trim(),
+          author: i.creator ?? i.author ?? "",
+          image: i.enclosure?.url ?? "",
+          date: i.isoDate ?? i.pubDate ?? "",
+          intro: firstParagraph(i["content:encoded"] ?? i.content),
+        }));
+      } catch (error) {
+        console.error(`Could not fetch ${url}:`, error);
+        return [];
+      }
+    }),
+  );
+
+  return results
+    .flat()
+    .sort((a, b) => (Date.parse(b.date) || 0) - (Date.parse(a.date) || 0));
+}
+
+
+const [reading, marxism, toRead, bookmarks, mixed] = await Promise.all([
+  shelf("currently-reading"),
+  shelf("marxism"),
+  shelf("to-read"),
+  getBookmarks(),
+  getMixedFeed(),
+]);
+
+const shortmixed = mixed.slice(0,6)
+const queue = toRead.slice(0, 8);
+
 ---
 
 <html lang="fr">
-    <head>
-        <Head title="404 - Page non trouvée" description="La page que vous recherchez n'existe pas." />
-    </head>
-    <body style=" height:100dvh;width:100vw; background-color: 000">
-        <MenuLayout />
-
-        <div class="page">
-
-        {reading.length > 0 && (
-  <section class="shelf">
+  <head>
+    <Head
+      title="Dashboard"
+      description="La page que vous recherchez n'existe pas."
+    />
+  </head>
+  <body style=" height:100dvh;width:100vw; background-color: 000">
+    <MenuLayout />
+    <Top />
+    <div class="contentWrapper">
+      <ArticleCard code="Null" region="" title={"A Lire"} class="pageTitle">
+        <div class="authorInfo" slot="right">
+          <p></p>
+        </div>
+      </ArticleCard>
+      <div class="page" style="padding-bottom: 100px;">
+        <section class="reading-now">
+  {reading.length > 0 && (
     <h2>Reading now</h2>
     <ul>{reading.map((b) => <li><a href={b.href}>
       {b.cover ? <img src={b.cover} alt="" loading="lazy" /> : <div class="blank">{b.title}</div>}
       <span class="t">{b.title}</span><span class="a">{b.author}</span>
     </a></li>)}</ul>
-  </section>
 )}
-        <section class="shelf">
-          <h2>Next up</h2>
-          <ul>{marxism.map((b) => <li><a href={b.href}>
-            {b.cover ? <img src={b.cover} alt="" loading="lazy" /> : <div class="blank">{b.title}</div>}
-            <span class="t">{b.title}</span><span class="a">{b.author}</span>
-          </a></li>)}</ul>
         </section>
+
+                <section class="substack">
+  {shortmixed.length > 0 && (
+
+    <ul class="bookmarks">{shortmixed.map((b) => <li data-image={b.image}><a href={b.href}>
+
+      <img src={b.image} alt="" loading="lazy" />
+      <h3>{b.title}</h3>
+      <p style="font-family: 'AlteRegular'; font-size: 0.9em; 
+    color: #a9a9a7; margin-top: -0.9em;">{b.source}</p>
+      <p>{b.intro}</p>
+      <div class="shape">
+        
+      </div>
+    </a>
+    </li>)}
+    </ul>
+)}
+        </section>
+
+        <section>
+          <ul>
+            <li>Quidem aliquid perferendis voluptates</li>
+            <li>Dolores quaerat illo totam porro</li>
+            <li>
+              Ipsa adipisci fugit assumenda dicta voluptates nihil reprehenderit
+              consequatur alias facilis rem
+            </li>
+            <li>Lorem ipsum dolor sit amet consectetur adipisicing elit</li>
+            <li>Fuga</li>
+          </ul>
+        </section>
+      </div>
+    </div>
+    <div class="contentWrapper">
+      <ArticleCard code="Null" region="" title={"Projets"} class="pageTitle">
+        <div class="authorInfo" slot="right">
+          <p></p>
         </div>
+      </ArticleCard>
+      <aside class="pageSummary" style="padding: 1rem 1rem 1rem 0.7rem">
+        <img
+          src="/assets/dashboard/logo_transparent.png"
+          alt="Logo Oasis"
+          aria-label="oasis"
+          style="transform:rotate(5deg)"
+        />
+        <img
+          src="/assets/dashboard/ayutthaya_icon.png"
+          alt="Logo Ayutthaya"
+          aria-label="ayutthaya"
+          style="transform:rotate(-10deg)"
+        />
+      </aside>
+      <div class="page project" >
+        <section id="oasis">
+          <ul>
+            <li>Lorem ipsum dolor sit amet consectetur adipisicing elit</li>
+            <li>Dolores quaerat illo totam porro</li>
+            <li>Quidem aliquid perferendis voluptates</li>
+            <li>
+              Ipsa adipisci fugit assumenda dicta voluptates nihil reprehenderit
+              consequatur alias facilis rem
+            </li>
+            <li>Fuga</li>
+          </ul>
+        </section>
+        <hr />
+        <section id="ayutthaya">
+          <ul>
+            <li>Quidem aliquid perferendis voluptates</li>
+            <li>Dolores quaerat illo totam porro</li>
+            <li>
+              Ipsa adipisci fugit assumenda dicta voluptates nihil reprehenderit
+              consequatur alias facilis rem
+            </li>
+            <li>Lorem ipsum dolor sit amet consectetur adipisicing elit</li>
+            <li>Fuga</li>
+            <li>https://www.orientalarchitecture.com/index</li>
+          </ul>
+        </section>
+      </div>
+    </div>
 
+    <script>
+      import { stretchText, endnote } from "../assets/js/color.js";
+      stretchText();
+      endnote();
+    </script>
+    <script>
+      document.querySelectorAll<HTMLElement>(".bookmarks li").forEach((li) => {
+        const shape: HTMLElement | null = li.querySelector(".shape");
+        if(!shape) return;
+        shape.style.backgroundImage = `url(${li.dataset.image})`;
 
+        li.addEventListener("mouseenter", () => {
+          shape.style.display = "block";
+          window.addEventListener("mousemove", (e) => {
+            if (shape) {
+              shape.style.left = `${e.clientX }px`;
+              shape.style.top = `${e.clientY - 100}px`;
+            }
+          });
+        });
 
+        li.addEventListener("mouseleave", () => {
+          shape.style.display = "none";
+        });
+      })
+      </script>
+    <script>
+      const links = [...document.querySelectorAll(".pageSummary img")];
 
+      const headings = links
+        .map((link) => {
+          const id = link.ariaLabel;
+          return id ? document.getElementById(id) : null;
+        })
+        .filter((heading): heading is HTMLElement => heading !== null);
 
-    </body>
+      let activeHeading: HTMLElement | null = null;
+
+      function updateActiveHeading() {
+        // Point at which a heading becomes "current"
+        const threshold = window.innerHeight * 0.25;
+
+        let current = null;
+
+        for (const heading of headings) {
+          const rect = heading.getBoundingClientRect();
+
+          if (rect.top <= threshold) {
+            current = heading;
+          } else {
+            break;
+          }
+        }
+
+        // Before reaching the first heading
+        if (!current) {
+          current = headings[0];
+        }
+
+        if (current === activeHeading) return;
+
+        activeHeading = current;
+
+        document.querySelectorAll(".pageSummary img").forEach((link) => {
+          link.classList.remove("active");
+        });
+
+        document
+          .querySelector(`[aria-label=${current.id}]`)
+          ?.classList.add("active");
+      }
+
+      window.addEventListener("scroll", updateActiveHeading, {
+        passive: true,
+      });
+
+      window.addEventListener("resize", updateActiveHeading);
+
+      updateActiveHeading();
+    </script>
+  </body>
 </html>

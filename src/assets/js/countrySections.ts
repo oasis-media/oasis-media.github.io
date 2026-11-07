@@ -83,7 +83,7 @@ export function buildCountrySections(input: Input): string {
         );
     }
     if (banners.length) {
-        sections.push(`<section>\n${banners.join("\n\n")}\n</section>`);
+        sections.push(`<section id="partis">\n${banners.join("\n\n")}\n</section>`);
     }
 
     return sections.join("\n");

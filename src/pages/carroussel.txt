@@ -1,0 +1,241 @@
+section ul.bookmark-carousel {
+  display: flex !important;
+  flex-flow: row nowrap !important;
+  gap: 2rem;
+  width: 100% !important;
+  max-width: 100%;
+  padding: 0 0 1rem !important;
+  margin: 0;
+  overflow-x: auto !important;
+  overflow-y: hidden;
+  list-style: none;
+  box-sizing: border-box;
+    scroll-snap-type: none;
+  scroll-behavior: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+section ul.bookmark-carousel > li {
+  flex: 0 0 50% !important;
+  width: 50%;
+  min-width: 0;
+  margin-top: 0;
+  scroll-snap-align: none;
+  box-sizing: border-box;
+}
+
+.carousel-wrapper {
+  width: 100%;
+}
+
+.carousel-progress {
+  height: 3px;
+  background: #ded8d6;
+  overflow: hidden;
+}
+
+.carousel-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: #bc1919;
+  transition: width 0.08s linear;
+  transform-origin: left;
+}
+
+.carousel-controls {
+  display: grid;
+  width: 45%;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.carousel-progress {
+  position: relative;
+  flex: 1;
+  height: 3px;
+  background: #ded8d6;
+  cursor: pointer;
+}
+
+.carousel-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: #bc1919;
+  pointer-events: none;
+}
+
+.carousel-arrow {
+  border: 0;
+  background: transparent;
+  color: #bc1919;
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.15rem 0.25rem;
+}
+
+
+
+.carousel-arrow:hover {
+  color: #800000;
+}
+
+.carousel-arrow:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+
+
+
+.bookmark-carousel {
+  scrollbar-width: none;
+  scroll-snap-type: none;
+}
+
+.bookmark-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.bookmark-carousel {
+  scrollbar-width: none;
+}
+
+.bookmark-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+
+
+
+<script>
+  document.querySelectorAll<HTMLElement>(".bookmark-carousel").forEach((carousel) => {
+    if (carousel.dataset.smoothScroll === "true") return;
+    carousel.dataset.smoothScroll = "true";
+
+    let target = carousel.scrollLeft;
+    let animationFrame = 0;
+
+    function animateScroll() {
+      const distance = target - carousel.scrollLeft;
+
+      if (Math.abs(distance) < 0.5) {
+        carousel.scrollLeft = target;
+        animationFrame = 0;
+        return;
+      }
+
+      carousel.scrollLeft += distance * 0.15;
+      animationFrame = requestAnimationFrame(animateScroll);
+    }
+
+    carousel.addEventListener("wheel", (event: WheelEvent) => {
+      if (carousel.scrollWidth <= carousel.clientWidth) return;
+
+      if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
+        event.preventDefault();
+
+        target += event.deltaY;
+        target = Math.max(
+          0,
+          Math.min(target, carousel.scrollWidth - carousel.clientWidth)
+        );
+
+        if (!animationFrame) {
+          animationFrame = requestAnimationFrame(animateScroll);
+        }
+      }
+    }, { passive: false });
+  });
+  
+  document.querySelectorAll<HTMLElement>(".carousel-wrapper").forEach((wrapper) => {
+    const carousel = wrapper.querySelector<HTMLElement>(".bookmark-carousel");
+    const progress = wrapper.querySelector<HTMLElement>(".carousel-progress");
+    const fill = wrapper.querySelector<HTMLElement>(".carousel-progress-fill");
+    const prev = wrapper.querySelector<HTMLButtonElement>(".carousel-prev");
+    const next = wrapper.querySelector<HTMLButtonElement>(".carousel-next");
+
+    if (!carousel || !progress || !fill || !prev || !next) return;
+    if (wrapper.dataset.controlsReady === "true") return;
+    wrapper.dataset.controlsReady = "true";
+
+    function updateProgress() {
+      const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+      const percentage = maxScroll > 0
+        ? (carousel.scrollLeft / maxScroll) * 100
+        : 0;
+
+      fill.style.width = `${percentage}%`;
+      progress.setAttribute("aria-valuenow", String(Math.round(percentage)));
+
+      prev.disabled = carousel.scrollLeft <= 1;
+      next.disabled = carousel.scrollLeft >= maxScroll - 1;
+    }
+
+    function scrollByAmount(direction: number) {
+      carousel.scrollBy({
+        left: direction * carousel.clientWidth * 0.8,
+        behavior: "smooth",
+      });
+    }
+
+    prev.addEventListener("click", () => scrollByAmount(-1));
+    next.addEventListener("click", () => scrollByAmount(1));
+
+    progress.addEventListener("click", (event) => {
+      const rect = progress.getBoundingClientRect();
+      const fraction = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
+      const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+
+      carousel.scrollTo({
+        left: fraction * maxScroll,
+        behavior: "smooth",
+      });
+    });
+
+    progress.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        scrollByAmount(1);
+      } else if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        scrollByAmount(-1);
+      } else if (event.key === "Home" || event.key === "End") {
+        event.preventDefault();
+        carousel.scrollTo({
+          left: event.key === "Home" ? 0 : carousel.scrollWidth,
+          behavior: "smooth",
+        });
+      }
+    });
+
+    carousel.addEventListener("scroll", updateProgress, { passive: true });
+    window.addEventListener("resize", updateProgress);
+    updateProgress();
+  });
+</script>
+
+
+<div class="carousel-wrapper">
+  <div class="carousel-controls">
+    <button class="carousel-arrow carousel-prev"
+            aria-label="Scroll backwards"
+            type="button">←</button>
+    <div class="carousel-progress"
+         role="progressbar"
+         aria-label="Carousel position"
+         aria-valuemin="0"
+         aria-valuemax="100"
+         aria-valuenow="0"
+         tabindex="0">
+      <div class="carousel-progress-fill"></div>
+    </div>
+
+    
+
+    <button class="carousel-arrow carousel-next"
+            aria-label="Scroll forwards"
+            type="button">→</button>
+  </div>

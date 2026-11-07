@@ -27,13 +27,20 @@ Hey
 
 </section>
 <section>
-<figure class="fullwidth">
 
 
-<img src="https://www.lalettre.fr/fr/utils/imageresize?x=1400&web=1&file64=TExBXFBob3Rvc1xlbW1hbnVlbG1hY3Jvbi5qcGc=">
-</figure>
-<h2>Emmanuel Macron, président de la République</h2>
+![Macron](https://www.lalettre.fr/fr/utils/imageresize?x=1400&web=1&file64=TExBXFBob3Rvc1xlbW1hbnVlbG1hY3Jvbi5qcGc= "Photo : La Lettre, oziehdzeiojazd, eodjeodjeziodhzedzeidhjzeoidjzeoidj, iejdizejd")
 
-Hey
+![Macron](https://www.lalettre.fr/fr/utils/imageresize?x=1400&web=1&file64=TExBXFBob3Rvc1xlbW1hbnVlbG1hY3Jvbi5qcGc=#full "Photo : La Lettre")
+
+## Emmanuel Macron, président de la République
+
+"Hey":margin[![Macron](https://www.lalettre.fr/fr/utils/imageresize?x=1400&web=1&file64=TExBXFBob3Rvc1xlbW1hbnVlbG1hY3Jvbi5qcGc= "Photo : La Lettre")  F.J. Cole, “The History of Albrecht Dürer’s Rhinoceros…”, *Science, Medicine, and History* (London, 1953).]
+
+Hey:side[Tzdeded.]. It was a sidenote.
+
+:::epigraph{by="Brother" source="Book"}
+"Hey"
+:::
 
 </section>

@@ -1,0 +1,101 @@
+.project ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.project li {
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.project li::before {
+  position: absolute;
+  left: 0;
+  top: 0.3em;
+  width: 1rem;
+  height: 1rem;
+  content: "";
+  background: url("/star.svg") no-repeat center / contain;
+}
+
+aside img {
+    width: 100%;
+    height: auto;
+    display: none;
+}
+
+aside img.active {
+    display: block;
+}
+
+.reading-now ul {
+  list-style: none;
+  padding-left: 0;
+  display: flex;
+  flex-direction: row;
+}
+
+.reading-now li a{
+  display: flex;
+  flex-direction: column;
+  padding-left: 1.5rem;
+  margin-right: 1rem;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.reading-now img {
+    height: 100px;
+}
+
+.substack a {
+    text-decoration: none;
+}
+
+.substack ul {
+    list-style: none;
+}
+
+.bookmarks   li::before {
+  position: absolute;
+  left: -2rem;
+  width: 2rem;
+  height: 2rem;
+  content: "";
+  background: url("/star.svg") no-repeat center / contain;
+}
+
+
+.bookmarks li {
+    position: relative;
+
+
+    h3 {
+        font-family: 'AlteRegular';
+    }
+
+    img {
+        display: none;
+        width: 20%;
+        height: auto;
+    }
+
+    p:nth-of-type(2) {
+        display: none;
+    }
+
+    .shape {
+        width: 200px;
+        height: 130px;
+        position: fixed;
+        top: 0;
+        border-radius: 60%;
+        display: none;
+        background-size: cover;
+        background-color: #dc1919;
+         pointer-events: none;
+        z-index: 1000;
+    }
+}
+

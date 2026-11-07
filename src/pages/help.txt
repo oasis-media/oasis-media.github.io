@@ -103,3 +103,21 @@ if (hasMouse) {
 
 
 
+
+
+        {reading.length > 0 && (
+  <section class="shelf">
+    <h2>Reading now</h2>
+    <ul>{reading.map((b) => <li><a href={b.href}>
+      {b.cover ? <img src={b.cover} alt="" loading="lazy" /> : <div class="blank">{b.title}</div>}
+      <span class="t">{b.title}</span><span class="a">{b.author}</span>
+    </a></li>)}</ul>
+  </section>
+)}
+        <section class="shelf">
+          <h2>Next up</h2>
+          <ul>{marxism.map((b) => <li><a href={b.href}>
+            {b.cover ? <img src={b.cover} alt="" loading="lazy" /> : <div class="blank">{b.title}</div>}
+            <span class="t">{b.title}</span><span class="a">{b.author}</span>
+          </a></li>)}</ul>
+        </section>
